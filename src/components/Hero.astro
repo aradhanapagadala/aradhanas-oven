@@ -1,0 +1,279 @@
+---
+import { site } from '../config/site';
+import { cookieSVG } from '../lib/cookie';
+import Oven from './Oven.astro';
+import Sticker from './Sticker.astro';
+
+const o = cookieSVG('strawberry', 11, { id: 'hero-o', shadow: false });
+const ribbonText = Array.from({ length: 8 }, () => `${site.hero.tagline} ✿ `).join('');
+---
+
+<section class="hero" id="home" aria-labelledby="hero-title">
+  <!-- diagonal stitched ribbon -->
+  <svg class="hero__ribbon" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <path id="ribbon-path" d="M-200 880C200 760 380 520 760 470S1360 330 1820 -40" />
+    </defs>
+    <use href="#ribbon-path" fill="none" stroke="var(--pink-600)" stroke-width="92" transform="translate(0 10)" />
+    <use href="#ribbon-path" fill="none" stroke="#fff" stroke-width="86" stroke-dasharray="7 9" />
+    <use href="#ribbon-path" fill="none" stroke="var(--rose)" stroke-width="76" />
+    <text class="hero__ribbon-text" dy="11">
+      <textPath href="#ribbon-path" id="ribbon-textpath" startOffset="0">{ribbonText}{ribbonText}</textPath>
+    </text>
+  </svg>
+
+  <!-- floating stickers (data-depth = how much they drift with the mouse) -->
+  <div class="hero__float" aria-hidden="true">
+    <Sticker kind="cookie" look="classic" seed={2} class="f f1" data-depth="0.9" />
+    <Sticker kind="cookie" look="ube" seed={5} class="f f2" data-depth="0.6" />
+    <Sticker kind="cookie" look="peanut" seed={3} class="f f3" data-depth="1.2" />
+    <Sticker kind="heart" class="f f4" data-depth="1.6" />
+    <Sticker kind="sparkle" class="f f5" data-depth="0.5" />
+    <Sticker kind="whisk" class="f f6" data-depth="0.8" />
+    <Sticker kind="milk" class="f f7" data-depth="1.1" />
+    <Sticker kind="star" class="f f8" data-depth="1.4" />
+    <Sticker kind="bow" class="f f9" data-depth="0.7" />
+    <Sticker kind="sparkle" class="f f10" data-depth="1.8" />
+  </div>
+
+  <div class="hero__center">
+    <p class="hero__hello hand" data-hero="hello">
+      {site.hero.hello}
+      <svg class="hero__squiggle" viewBox="0 0 220 24" aria-hidden="true">
+        <path d="M4 14C30 2 40 22 66 12S100 4 124 13 168 20 216 8" fill="none" stroke="var(--pink-500)" stroke-width="5" stroke-linecap="round"></path>
+      </svg>
+    </p>
+
+    <h1 class="hero__title display" id="hero-title" aria-label={site.name}>
+      <span class="hero__line puffy" data-hero="line" aria-hidden="true">aradhana’s</span>
+      <span class="hero__line hero__line--2" aria-hidden="true">
+        <span class="hero__o" data-hero="o" set:html={o} />
+        <span class="puffy" data-hero="line">ven!</span>
+      </span>
+    </h1>
+
+    <p class="hero__sub" data-hero="sub">
+      <span>{site.hero.sub}</span>
+    </p>
+
+    <div class="hero__cta" data-hero="cta">
+      <a class="btn" href="#menu" data-scroll-to="#menu" data-cursor="yum!">
+        see the menu
+        <svg width="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <a class="btn btn--cream" href="#about" data-scroll-to="#about" data-cursor="hi!">meet aradhana</a>
+    </div>
+  </div>
+
+  <div class="hero__oven" data-hero="oven" data-depth="0.4">
+    <Oven id="hero-oven" cookie="strawberry" />
+  </div>
+
+  <a class="hero__scroll hand" href="#about" data-scroll-to="#about">
+    <span class="hero__scroll-dot" aria-hidden="true"></span>
+    {site.hero.scrollHint}
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 120px 0 110px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__ribbon {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: visible;
+  }
+  .hero__ribbon-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 34px;
+    letter-spacing: 0.06em;
+    fill: #fff;
+  }
+
+  .hero__center {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    padding-inline: 16px;
+  }
+  .hero__hello {
+    position: relative;
+    margin: 0 0 0.2em;
+    font-size: clamp(1.7rem, 1.2rem + 2vw, 2.8rem);
+    font-weight: 700;
+    color: var(--choco-900);
+    line-height: 1;
+  }
+  .hero__squiggle {
+    position: absolute;
+    left: 50%;
+    bottom: -0.45em;
+    width: 108%;
+    translate: -50% 0;
+  }
+
+  .hero__title {
+    margin: 0;
+    font-size: clamp(3.6rem, 1.4rem + 10.5vw, 11rem);
+    line-height: 0.88;
+  }
+  .hero__line {
+    display: block;
+    white-space: nowrap;
+  }
+  .hero__line--2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .hero__line--2 .puffy {
+    --puffy-fill: var(--lav-500);
+  }
+  .hero__o {
+    display: inline-block;
+    width: 0.86em;
+    margin-right: 0.04em;
+    translate: 0 0.04em;
+    filter: drop-shadow(0.05em 0 0 #fff) drop-shadow(-0.05em 0 0 #fff) drop-shadow(0 0.05em 0 #fff) drop-shadow(0 -0.05em 0 #fff)
+      drop-shadow(0 0.07em 0 var(--choco-700));
+  }
+  .hero__o :global(svg) {
+    width: 100%;
+    animation: o-spin 14s linear infinite;
+  }
+  @keyframes o-spin {
+    to { rotate: 360deg; }
+  }
+
+  .hero__sub {
+    margin: 1.4em 0 0;
+  }
+  .hero__sub span {
+    display: inline-block;
+    padding: 0.5em 1.1em;
+    border: 2.5px dashed var(--choco-900);
+    border-radius: 999px;
+    background: var(--cream);
+    font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.15rem);
+    rotate: -1.5deg;
+  }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 1.6em;
+  }
+
+  .hero__oven {
+    position: absolute;
+    right: clamp(-30px, 2vw, 60px);
+    bottom: -22px;
+    width: clamp(150px, 16vw, 250px);
+    z-index: 3;
+    rotate: -6deg;
+  }
+
+  .hero__float {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hero__float :global(.f) {
+    position: absolute;
+    will-change: transform;
+  }
+  .hero__float :global(.f1) { width: clamp(70px, 9vw, 140px); left: 7%; top: 18%; }
+  .hero__float :global(.f2) { width: clamp(60px, 7vw, 110px); right: 9%; top: 15%; }
+  .hero__float :global(.f3) { width: clamp(56px, 6vw, 96px); left: 14%; bottom: 16%; }
+  .hero__float :global(.f4) { width: clamp(34px, 3.4vw, 54px); left: 25%; top: 12%; }
+  .hero__float :global(.f5) { width: clamp(30px, 3vw, 48px); right: 25%; top: 9%; }
+  .hero__float :global(.f6) { width: clamp(28px, 2.6vw, 42px); left: 4%; top: 52%; rotate: -24deg; }
+  .hero__float :global(.f7) { width: clamp(36px, 3.4vw, 54px); right: 6%; top: 44%; rotate: 12deg; }
+  .hero__float :global(.f8) { width: clamp(38px, 3.6vw, 58px); left: 30%; bottom: 10%; rotate: -10deg; }
+  .hero__float :global(.f9) { width: clamp(50px, 4.6vw, 76px); right: 30%; bottom: 13%; rotate: 8deg; }
+  .hero__float :global(.f10) { width: clamp(22px, 2vw, 32px); left: 46%; top: 8%; }
+
+  .hero__scroll {
+    position: absolute;
+    left: clamp(16px, 4vw, 48px);
+    bottom: 22px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--choco-900);
+  }
+  .hero__scroll-dot {
+    width: 22px;
+    height: 34px;
+    border: 3px solid var(--choco-900);
+    border-radius: 99px;
+    background: var(--cream);
+    position: relative;
+  }
+  .hero__scroll-dot::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    width: 7px;
+    height: 7px;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: var(--pink-500);
+    animation: scroll-dot 1.6s var(--ease-soft) infinite;
+  }
+  @keyframes scroll-dot {
+    0% { transform: translateY(0); opacity: 1; }
+    80% { transform: translateY(13px); opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      padding: 96px 0 150px;
+    }
+    .hero__title {
+      font-size: 12.4vw;
+    }
+    .hero__oven {
+      right: 50%;
+      translate: 50% 0;
+      bottom: 64px;
+      width: 120px;
+      rotate: 0deg;
+    }
+    .hero__scroll {
+      display: none;
+    }
+    .hero__float :global(.f6),
+    .hero__float :global(.f7),
+    .hero__float :global(.f10) {
+      display: none;
+    }
+    .hero__float :global(.f1) { top: 11%; left: 3%; }
+    .hero__float :global(.f2) { top: 12%; right: 3%; }
+    .hero__float :global(.f3) { bottom: 20%; left: 6%; }
+    .hero__float :global(.f9) { bottom: 22%; right: 6%; }
+    .hero__float :global(.f8) { bottom: 32%; left: 18%; }
+  }
+</style>

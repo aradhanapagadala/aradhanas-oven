@@ -1,0 +1,53 @@
+/* ✿ the palette — change a color here and it changes everywhere ✿ */
+:root {
+  /* lavender sky */
+  --lav-50: #f8f4ff;
+  --lav-100: #efe7ff;
+  --lav-200: #e0d2fd;
+  --lav-300: #c9b3f7;
+  --lav-400: #ad8ff0;
+  --lav-500: #8f6be0;
+
+  /* night kitchen */
+  --plum-700: #4a2f78;
+  --plum-800: #34205a;
+  --plum-900: #221438;
+
+  /* pinks */
+  --pink-100: #ffe8f4;
+  --pink-200: #ffd2ea;
+  --pink-300: #ffb0d8;
+  --pink-400: #ff8cc8;
+  --pink-500: #ff5cb5;
+  --pink-600: #e63e9b;
+  --rose: #ec9bbb;
+
+  /* chocolate */
+  --choco-900: #3a170c;
+  --choco-800: #4b1f10;
+  --choco-700: #642a15;
+  --choco-500: #8a4524;
+
+  /* warm bits */
+  --cream: #fff7ec;
+  --butter: #ffe6b5;
+  --pumpkin: #f2873a;
+  --leaf: #7fae5a;
+
+  /* roles */
+  --ink: var(--choco-900);
+  --ink-soft: color-mix(in oklab, var(--choco-900) 72%, var(--lav-500));
+  --bg: var(--lav-100);
+
+  /* type */
+  --font-display: 'Sniglet', 'Baloo 2', ui-rounded, system-ui, sans-serif;
+  --font-body: 'Delius', ui-rounded, system-ui, sans-serif;
+  --font-hand: 'Gaegu', 'Comic Sans MS', cursive;
+
+  /* shape */
+  --r-sm: 14px;
+  --r-md: 24px;
+  --r-lg: 40px;
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -1,0 +1,408 @@
+---
+import { site } from '../config/site';
+import { cookieSVG } from '../lib/cookie';
+import Oven from './Oven.astro';
+import Sticker from './Sticker.astro';
+
+const b = site.bake;
+const flyCookie = cookieSVG('classic', 4, { id: 'bake-fly', shadow: false });
+const doughBall = (i: number) => cookieSVG('classic', 30 + i, { id: `tray-${i}`, shadow: false });
+---
+
+<section class="bake" id="bake" aria-labelledby="bake-title">
+  <div class="bake__pin" data-bake-pin>
+    <div class="bake__head wrap">
+      <p class="kicker">{b.kicker}</p>
+      <h2 class="bake__title display puffy" id="bake-title">{b.heading}</h2>
+    </div>
+
+    <div class="bake__grid wrap">
+      <div class="bake__stage" aria-hidden="true">
+        <!-- step 1: mixing bowl -->
+        <div class="bowl" data-b="bowl">
+          <div class="bowl__whisk" data-b="whisk"><Sticker kind="whisk" /></div>
+          <svg viewBox="0 0 220 140">
+            <ellipse cx="110" cy="40" rx="100" ry="24" fill="var(--butter)" stroke="var(--choco-900)" stroke-width="5" />
+            <path d="M30 42c8-14 40-20 80-18s70 8 78 18" fill="none" stroke="#D9A066" stroke-width="10" stroke-linecap="round" />
+            <circle cx="70" cy="38" r="7" fill="var(--choco-800)" />
+            <circle cx="120" cy="34" r="6" fill="var(--choco-800)" />
+            <circle cx="150" cy="44" r="6.5" fill="var(--choco-800)" />
+            <path d="M10 40c0 54 44 92 100 92s100-38 100-92" fill="var(--lav-300)" stroke="var(--choco-900)" stroke-width="5" stroke-linejoin="round" />
+            <path d="M34 66c10 28 40 46 76 46" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".55" />
+            <path d="M60 90h100M48 72h124" stroke="var(--lav-500)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12" />
+          </svg>
+        </div>
+
+        <!-- step 2: tray of dough balls -->
+        <div class="tray" data-b="tray">
+          <div class="tray__balls">
+            {[0, 1, 2].map((i) => <span class="tray__ball" set:html={doughBall(i)} />)}
+          </div>
+          <svg viewBox="0 0 260 40" class="tray__pan">
+            <path d="M6 10h248l-14 24H20Z" fill="#C9CCD8" stroke="var(--choco-900)" stroke-width="5" stroke-linejoin="round" />
+            <path d="M24 18h212" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7" />
+          </svg>
+        </div>
+
+        <!-- heat squiggles -->
+        <div class="heat" data-b="heat">
+          {[0, 1, 2].map(() => <svg viewBox="0 0 20 60"><path d="M10 58c-8-8 8-14 0-22s8-14 0-22 8-12 0-12" fill="none" stroke="var(--pink-300)" stroke-width="4" stroke-linecap="round" /></svg>)}
+        </div>
+
+        <Oven id="bake-oven" class="bake__oven" cookie="classic" label="the oven baking a cookie" />
+
+        <div class="ding display" data-b="ding">{b.done}</div>
+        <div class="fly" data-b="fly" set:html={flyCookie} />
+        <div class="burst" data-b="burst">
+          {Array.from({ length: 10 }, (_, i) => <Sticker kind={i % 3 ? 'heart' : 'sparkle'} class="burst__p" style={`--a:${i * 36}deg`} />)}
+        </div>
+      </div>
+
+      <div class="bake__copy">
+        <ol class="steps" role="list">
+          {
+            b.steps.map((s, i) => (
+              <li class="step" data-step={i}>
+                <span class="step__num display">0{i + 1}</span>
+                <h3 class="step__title display">{s.title}</h3>
+                <p class="step__text">{s.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="thermo" aria-hidden="true">
+          <div class="thermo__tube"><i data-b="mercury"></i></div>
+          <span class="thermo__bulb"></span>
+          <span class="thermo__read display"><b data-b="temp">70</b>°F</span>
+        </div>
+        <div class="dots" aria-hidden="true">
+          {b.steps.map((_, i) => <i data-dot={i} />)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bake {
+    --night: var(--plum-900);
+    color: var(--cream);
+    background:
+      radial-gradient(60% 50% at 30% 60%, rgb(255 138 61 / 0.12), transparent 70%),
+      radial-gradient(circle at 20% 20%, rgb(255 255 255 / 0.9) 1px, transparent 1.6px) 0 0 / 120px 120px,
+      radial-gradient(circle at 70% 60%, rgb(255 255 255 / 0.6) 1px, transparent 1.6px) 0 0 / 90px 90px,
+      linear-gradient(180deg, var(--plum-800), var(--plum-900));
+    border-block: 3px solid var(--choco-900);
+  }
+  .bake::before,
+  .bake::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 28px;
+    z-index: 2;
+    background: radial-gradient(circle at 50% 0, var(--plum-800) 14px, transparent 14.5px) 0 0 / 40px 28px repeat-x;
+  }
+  .bake::before {
+    top: -26px;
+    background: radial-gradient(circle at 50% 100%, var(--plum-800) 14px, transparent 14.5px) 0 0 / 40px 28px repeat-x;
+  }
+  .bake::after {
+    bottom: -26px;
+    background: radial-gradient(circle at 50% 0, var(--plum-900) 14px, transparent 14.5px) 0 0 / 40px 28px repeat-x;
+  }
+
+  .bake__pin {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(8px, 2vh, 28px);
+    padding: clamp(86px, 11vh, 120px) 0 clamp(30px, 5vh, 60px);
+  }
+  .bake__head {
+    text-align: center;
+  }
+  .bake .kicker {
+    color: var(--pink-300);
+  }
+  .bake__title {
+    margin: 0.15em 0 0;
+    font-size: clamp(2.1rem, 1.4rem + 3.2vw, 4.4rem);
+    --puffy-fill: var(--butter);
+    --puffy-edge: var(--choco-900);
+    --puffy-depth: var(--pink-500);
+  }
+
+  .bake__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(20px, 5vw, 80px);
+    align-items: center;
+  }
+  .bake__stage {
+    position: relative;
+    height: min(58svh, 520px);
+    display: grid;
+    place-items: end center;
+  }
+  .bake__stage :global(.bake__oven) {
+    position: relative;
+    z-index: 2;
+    height: 88%;
+  }
+  .bake__stage :global(.bake__oven .oven__steam) {
+    display: none;
+  }
+
+  .bowl {
+    position: absolute;
+    z-index: 3;
+    left: 2%;
+    top: 4%;
+    width: 34%;
+  }
+  .bowl svg {
+    width: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 10px 10px rgb(0 0 0 / 0.25));
+  }
+  .bowl__whisk {
+    position: absolute;
+    left: 42%;
+    top: -58%;
+    width: 22%;
+    transform-origin: 50% 90%;
+  }
+
+  .tray {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    bottom: 4%;
+    width: 38%;
+  }
+  .tray__balls {
+    display: flex;
+    justify-content: center;
+    gap: 6%;
+    margin-bottom: -6%;
+    padding-inline: 8%;
+  }
+  .tray__ball {
+    width: 26%;
+    filter: saturate(0.55) brightness(1.18);
+  }
+  .tray__ball :global(svg) {
+    transform: scaleY(0.82);
+  }
+  .tray__pan {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .heat {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 0;
+    translate: -50% 0;
+    display: flex;
+    gap: 22px;
+    opacity: 0;
+  }
+  .heat svg {
+    width: 18px;
+    animation: heat 1.4s ease-in-out infinite alternate;
+  }
+  .heat svg:nth-child(2) { animation-delay: 0.3s; translate: 0 -12px; }
+  .heat svg:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes heat {
+    to { transform: translateY(-10px) scaleX(-1); }
+  }
+
+  .ding {
+    position: absolute;
+    z-index: 6;
+    right: 8%;
+    top: 4%;
+    padding: 0.3em 0.7em 0.35em;
+    border: 3px solid var(--choco-900);
+    border-radius: 24px 24px 24px 6px;
+    background: var(--butter);
+    color: var(--choco-900);
+    font-size: clamp(1.6rem, 1rem + 2vw, 2.6rem);
+    box-shadow: 0 5px 0 var(--choco-900);
+    opacity: 0;
+    scale: 0;
+  }
+  .fly {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    bottom: 22%;
+    width: 18%;
+    translate: -50% 0;
+    opacity: 0;
+    filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.35));
+  }
+  .burst {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 34%;
+    width: 0;
+    height: 0;
+  }
+  .burst :global(.burst__p) {
+    position: absolute;
+    width: 30px;
+    translate: -50% -50%;
+    opacity: 0;
+  }
+
+  .bake__copy {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 28px;
+    align-items: center;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .step {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .step:first-child {
+    opacity: 1;
+    visibility: visible;
+  }
+  .step__num {
+    display: block;
+    font-size: clamp(3rem, 2rem + 4vw, 6rem);
+    color: transparent;
+    -webkit-text-stroke: 3px var(--pink-300);
+    line-height: 0.9;
+  }
+  .step__title {
+    margin: 0.15em 0 0.3em;
+    font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3.2rem);
+    color: var(--pink-300);
+  }
+  .step__text {
+    margin: 0;
+    max-width: 30ch;
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.3rem);
+    color: color-mix(in oklab, var(--cream) 88%, var(--lav-300));
+  }
+
+  .thermo {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    width: 46px;
+  }
+  .thermo__tube {
+    position: relative;
+    width: 24px;
+    height: clamp(180px, 30svh, 280px);
+    border: 3px solid var(--cream);
+    border-bottom: 0;
+    border-radius: 14px 14px 0 0;
+    background: rgb(255 255 255 / 0.1);
+    overflow: hidden;
+  }
+  .thermo__tube i {
+    position: absolute;
+    inset: 4px 4px 0;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(0deg, var(--pink-500), #ff8a3d);
+    transform-origin: bottom;
+    transform: scaleY(0.08);
+  }
+  .thermo__bulb {
+    width: 44px;
+    height: 44px;
+    margin-top: -6px;
+    border: 3px solid var(--cream);
+    border-radius: 50%;
+    background: var(--pink-500);
+  }
+  .thermo__read {
+    margin-top: 8px;
+    font-size: 1.15rem;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dots {
+    position: absolute;
+    left: 0;
+    bottom: -42px;
+    display: flex;
+    gap: 8px;
+  }
+  .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 99px;
+    border: 2px solid var(--cream);
+    transition:
+      width 0.4s var(--ease-pop),
+      background 0.3s;
+  }
+  .dots i.is-on {
+    width: 34px;
+    background: var(--pink-400);
+  }
+
+  @media (max-width: 860px) {
+    .bake__pin {
+      justify-content: flex-start;
+      gap: 6px;
+      padding-top: 84px;
+      padding-bottom: 96px;
+    }
+    .bake__grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .bake__stage {
+      height: 38svh;
+    }
+    .bowl {
+      top: 22%;
+      left: 0;
+      width: 28%;
+    }
+    .bowl__whisk {
+      top: -48%;
+    }
+    .tray {
+      width: 34%;
+    }
+    .bake__copy {
+      gap: 16px;
+    }
+    .thermo__tube {
+      height: 18svh;
+    }
+    .thermo__bulb {
+      width: 34px;
+      height: 34px;
+    }
+    .step__num {
+      font-size: 2.6rem;
+    }
+    .dots {
+      bottom: -26px;
+    }
+  }
+</style>

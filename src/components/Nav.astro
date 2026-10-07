@@ -1,0 +1,195 @@
+---
+import { site } from '../config/site';
+const icons: Record<string, string> = {
+  home: '<path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z"/>',
+  about: '<path d="M12 20.5 4.4 13a4.6 4.6 0 0 1 7.6-5.2 4.6 4.6 0 0 1 7.6 5.2Z"/>',
+  bake: '<rect x="4" y="5" width="16" height="15" rx="4"/><path d="M4 10h16M8 14h8"/>',
+  menu: '<circle cx="12" cy="12" r="8"/><circle cx="9.5" cy="10" r="1"/><circle cx="14" cy="9" r="1"/><circle cx="13" cy="14" r="1"/><circle cx="9" cy="14.5" r="1"/>',
+  jar: '<path d="M8 4h8M7 7h10v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/>',
+};
+---
+
+<header class="nav" id="nav">
+  <a class="nav__logo" href="#home" data-scroll-to="#home" aria-label={`${site.name} — back to top`}>
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="4" y="6" width="32" height="28" rx="8" fill="var(--pink-300)" stroke="var(--choco-900)" stroke-width="3" />
+      <path d="M4 14h32" stroke="var(--choco-900)" stroke-width="3" />
+      <rect x="10" y="19" width="20" height="10" rx="3" fill="var(--choco-900)" />
+      <circle cx="11" cy="10" r="1.8" fill="var(--choco-900)" />
+      <circle cx="17" cy="10" r="1.8" fill="var(--choco-900)" />
+    </svg>
+    <span class="display">{site.name}</span>
+  </a>
+
+  <nav class="nav__links" aria-label="sections">
+    <span class="nav__blob" aria-hidden="true"></span>
+    {
+      site.nav.map((n) => (
+        <a href={`#${n.id}`} data-scroll-to={`#${n.id}`} data-nav={n.id}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" set:html={icons[n.id] ?? ''} />
+          <span>{n.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <button class="nav__sound" id="sound-toggle" type="button" aria-pressed="false" title="toggle cute sounds">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6Z" />
+      <path d="M10 19a2 2 0 0 0 4 0" />
+      <path class="nav__sound-off" d="M3 3l18 18" />
+    </svg>
+    <span class="sr-only">sounds</span>
+  </button>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 14px 14px auto;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    pointer-events: none;
+  }
+  .nav > * {
+    pointer-events: auto;
+  }
+  .nav__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 8px;
+    border: 3px solid var(--choco-900);
+    border-radius: 999px;
+    background: var(--cream);
+    box-shadow: 0 4px 0 var(--choco-900);
+    text-decoration: none;
+    font-size: 1.05rem;
+    color: var(--choco-900);
+    transition: transform 0.3s var(--ease-pop);
+  }
+  .nav__logo:hover {
+    transform: rotate(-3deg) scale(1.04);
+  }
+  .nav__logo svg {
+    width: 34px;
+  }
+  .nav__links {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    padding: 6px;
+    border: 3px solid var(--choco-900);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--cream) 88%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 0 var(--choco-900);
+  }
+  .nav__links a {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.98rem;
+    color: var(--choco-900);
+    transition: color 0.3s;
+  }
+  .nav__links a.is-active {
+    color: #fff;
+  }
+  .nav__links svg {
+    width: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .nav__blob {
+    position: absolute;
+    z-index: 0;
+    top: 6px;
+    left: 0;
+    height: calc(100% - 12px);
+    width: 0;
+    border-radius: 999px;
+    background: var(--pink-500);
+    box-shadow: inset 0 -3px 0 var(--pink-600);
+    transition:
+      transform 0.5s var(--ease-pop),
+      width 0.5s var(--ease-pop);
+  }
+  .nav__sound {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--choco-900);
+    border-radius: 50%;
+    background: var(--butter);
+    box-shadow: 0 4px 0 var(--choco-900);
+    transition: transform 0.3s var(--ease-pop);
+  }
+  .nav__sound:hover {
+    transform: rotate(12deg);
+  }
+  .nav__sound svg {
+    width: 24px;
+    fill: none;
+    stroke: var(--choco-900);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+  }
+  .nav__sound[aria-pressed='true'] {
+    background: var(--pink-300);
+    animation: ring 0.6s var(--ease-pop);
+  }
+  .nav__sound[aria-pressed='true'] .nav__sound-off {
+    display: none;
+  }
+  @keyframes ring {
+    30% { rotate: -16deg; }
+    60% { rotate: 12deg; }
+  }
+
+  /* phones: links become a floating bottom dock */
+  @media (max-width: 760px) {
+    .nav {
+      inset: 10px 10px auto;
+    }
+    .nav__logo {
+      font-size: 0.95rem;
+    }
+    .nav__sound {
+      width: 46px;
+      height: 46px;
+    }
+    .nav__links {
+      position: fixed;
+      left: 50%;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      translate: -50% 0;
+      width: min(420px, calc(100% - 24px));
+      justify-content: space-between;
+    }
+    .nav__links a {
+      flex: 1;
+      flex-direction: column;
+      gap: 1px;
+      padding: 6px 2px 5px;
+      font-size: 0.72rem;
+    }
+    .nav__links svg {
+      width: 20px;
+    }
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+/* Little hand-drawn sticker doodles. <Sticker kind="heart" /> */
+import { cookieSVG, type CookieLook } from '../lib/cookie';
+interface Props {
+  kind: 'heart' | 'sparkle' | 'star' | 'whisk' | 'milk' | 'pin' | 'cookie' | 'bow' | 'cupcake';
+  look?: CookieLook;
+  seed?: number;
+  class?: string;
+  style?: string;
+  [key: string]: any;
+}
+const { kind, look = 'classic', seed = 1, class: cls = '', style, ...rest } = Astro.props;
+const ink = 'var(--choco-900)';
+---
+
+<span class:list={['stk', `stk--${kind}`, cls]} style={style} aria-hidden="true" {...rest}>
+  {kind === 'cookie' && <Fragment set:html={cookieSVG(look, seed, { id: `stk-${look}-${seed}`, shadow: false })} />}
+  {
+    kind === 'heart' && (
+      <svg viewBox="0 0 64 58">
+        <path d="M32 54 7.5 29.6A14.6 14.6 0 0 1 32 11.4a14.6 14.6 0 0 1 24.5 18.2Z" fill="var(--pink-400)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <path d="M15 22a7 7 0 0 1 8-5" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8" />
+      </svg>
+    )
+  }
+  {
+    kind === 'sparkle' && (
+      <svg viewBox="0 0 64 64">
+        <path d="M32 4c2.4 15.6 12.4 25.6 28 28-15.6 2.4-25.6 12.4-28 28-2.4-15.6-12.4-25.6-28-28C19.6 29.6 29.6 19.6 32 4Z" fill="var(--butter)" stroke={ink} stroke-width="3.6" stroke-linejoin="round" />
+      </svg>
+    )
+  }
+  {
+    kind === 'star' && (
+      <svg viewBox="0 0 64 62">
+        <path d="M32 5.5c1.6 0 2.6 1 3.4 2.6l6 12.2 13.4 2c3.6.5 4.6 4 2 6.4l-9.7 9.4 2.3 13.4c.6 3.5-2.4 5.6-5.5 4L32 49.2l-11.9 6.3c-3.1 1.6-6.1-.5-5.5-4l2.3-13.4-9.7-9.4c-2.6-2.5-1.6-5.9 2-6.4l13.4-2 6-12.2c.8-1.6 1.8-2.6 3.4-2.6Z" fill="var(--lav-300)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <circle cx="25" cy="31" r="2.6" fill={ink} />
+        <circle cx="39" cy="31" r="2.6" fill={ink} />
+        <path d="M29 37q3 3 6 0" fill="none" stroke={ink} stroke-width="2.6" stroke-linecap="round" />
+      </svg>
+    )
+  }
+  {
+    kind === 'whisk' && (
+      <svg viewBox="0 0 64 120">
+        <rect x="26" y="74" width="12" height="42" rx="6" fill="var(--pink-400)" stroke={ink} stroke-width="4" />
+        <path d="M32 76C10 60 10 20 32 6c22 14 22 54 0 70Z" fill="none" stroke={ink} stroke-width="4" />
+        <path d="M32 76C21 58 21 22 32 6M32 76C43 58 43 22 32 6" fill="none" stroke={ink} stroke-width="3.4" />
+        <path d="M32 6v70" stroke={ink} stroke-width="3" />
+      </svg>
+    )
+  }
+  {
+    kind === 'milk' && (
+      <svg viewBox="0 0 64 100">
+        <path d="M14 30 22 12h20l8 18v60a6 6 0 0 1-6 6H20a6 6 0 0 1-6-6Z" fill="#fff" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <path d="M22 12h20v-6H22Z" fill="var(--pink-300)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <path d="M14 46h36v26H14Z" fill="var(--pink-300)" />
+        <path d="M14 46h36M14 72h36" stroke={ink} stroke-width="3" />
+        <circle cx="26" cy="57" r="2.4" fill={ink} />
+        <circle cx="38" cy="57" r="2.4" fill={ink} />
+        <path d="M29 62q3 3 6 0" fill="none" stroke={ink} stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+    )
+  }
+  {
+    kind === 'pin' && (
+      <svg viewBox="0 0 160 44">
+        <rect x="4" y="15" width="28" height="14" rx="7" fill="var(--lav-300)" stroke={ink} stroke-width="4" />
+        <rect x="128" y="15" width="28" height="14" rx="7" fill="var(--lav-300)" stroke={ink} stroke-width="4" />
+        <rect x="28" y="4" width="104" height="36" rx="14" fill="var(--butter)" stroke={ink} stroke-width="4" />
+        <path d="M40 14h50" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8" />
+      </svg>
+    )
+  }
+  {
+    kind === 'bow' && (
+      <svg viewBox="0 0 90 60">
+        <path d="M45 28C30 6 6 6 6 24s20 22 39 6Z" fill="var(--pink-400)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <path d="M45 28C60 6 84 6 84 24S64 46 45 30Z" fill="var(--pink-400)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <path d="M40 32 30 56l10-4 6 6 2-26Zm10 0 10 24-10-4-6 6-2-26Z" fill="var(--pink-500)" stroke={ink} stroke-width="3.6" stroke-linejoin="round" />
+        <rect x="37" y="20" width="16" height="16" rx="6" fill="var(--pink-300)" stroke={ink} stroke-width="4" />
+      </svg>
+    )
+  }
+  {
+    kind === 'cupcake' && (
+      <svg viewBox="0 0 72 84">
+        <path d="M12 44h48l-7 34H19Z" fill="var(--lav-300)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <path d="M26 46l2 30M36 46v30M46 46l-2 30" stroke={ink} stroke-width="2.6" opacity=".5" />
+        <path d="M8 44c-2-12 8-16 12-15 0-12 10-18 16-18s16 6 16 18c4-1 14 3 12 15Z" fill="var(--pink-200)" stroke={ink} stroke-width="4" stroke-linejoin="round" />
+        <circle cx="36" cy="8" r="6" fill="#E8344F" stroke={ink} stroke-width="3.6" />
+        <path d="M20 34l4-2M44 24l3 3M30 26l2 3M50 36l3-2" stroke="var(--lav-500)" stroke-width="3" stroke-linecap="round" />
+      </svg>
+    )
+  }
+</span>
+
+<style>
+  .stk {
+    display: inline-block;
+    line-height: 0;
+  }
+  .stk :global(svg) {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)
+      drop-shadow(0 6px 6px rgb(58 23 12 / 0.16));
+  }
+</style>

@@ -1,0 +1,228 @@
+@import '@fontsource/sniglet/latin-400.css';
+@import '@fontsource/sniglet/latin-800.css';
+@import '@fontsource/delius/latin-400.css';
+@import '@fontsource/gaegu/latin-400.css';
+@import '@fontsource/gaegu/latin-700.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  scroll-behavior: auto;
+  overflow-x: clip;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.15rem);
+  line-height: 1.55;
+  background: var(--bg);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--pink-400);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px dashed var(--pink-500);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+section {
+  position: relative;
+}
+
+.wrap {
+  width: min(1200px, 100% - 2 * clamp(16px, 4vw, 48px));
+  margin-inline: auto;
+}
+
+/* ── type helpers ─────────────────────────── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+}
+
+/* puffy sticker lettering: white outline + chocolate "thickness" */
+.puffy {
+  --puffy-fill: var(--pink-500);
+  --puffy-edge: #fff;
+  --puffy-depth: var(--choco-700);
+  color: var(--puffy-fill);
+  -webkit-text-stroke: 0.1em var(--puffy-edge);
+  paint-order: stroke fill;
+  filter: drop-shadow(0 0 0.025em var(--puffy-edge)) drop-shadow(0 0.055em 0 var(--puffy-depth)) drop-shadow(0 0.14em 0.18em rgb(58 23 12 / 0.16));
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-hand);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  color: var(--pink-600);
+  line-height: 1;
+}
+.kicker::before,
+.kicker::after {
+  content: '✿';
+  font-size: 0.8em;
+  color: var(--lav-400);
+}
+
+.hand {
+  font-family: var(--font-hand);
+}
+
+/* sticker treatment for any element / svg */
+.sticker {
+  filter: drop-shadow(0 0 0 #fff) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff)
+    drop-shadow(0 -2px 0 #fff) drop-shadow(0 6px 8px rgb(58 23 12 / 0.18));
+}
+
+/* ── buttons ──────────────────────────────── */
+.btn {
+  --b-bg: var(--pink-500);
+  --b-fg: #fff;
+  --b-depth: var(--pink-600);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.85em 1.4em 0.8em;
+  border: 3px solid var(--choco-900);
+  border-radius: 999px;
+  background: var(--b-bg);
+  color: var(--b-fg);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.12rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  line-height: 1;
+  box-shadow: 0 5px 0 var(--choco-900);
+  transition:
+    transform 0.25s var(--ease-pop),
+    box-shadow 0.25s var(--ease-pop);
+}
+.btn:hover {
+  transform: translateY(-3px) rotate(-1.5deg);
+  box-shadow: 0 8px 0 var(--choco-900);
+}
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--choco-900);
+}
+.btn--cream {
+  --b-bg: var(--cream);
+  --b-fg: var(--choco-900);
+}
+.btn--lav {
+  --b-bg: var(--lav-300);
+  --b-fg: var(--choco-900);
+}
+
+/* ── reveal defaults (only hidden when JS is running) ── */
+html.js [data-reveal] {
+  opacity: 0;
+}
+html.reduced [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* film grain over everything, very subtle */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .1 0 0 0 0 .1 0 0 0 1.4 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+@keyframes grain {
+  0% { background-position: 0 0; }
+  20% { background-position: -37px 21px; }
+  40% { background-position: 25px -40px; }
+  60% { background-position: -18px -9px; }
+  80% { background-position: 41px 33px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* hero pieces wait for the intro animation */
+html.js:not(.reduced) [data-hero] {
+  opacity: 0;
+}
+html.reduced .step {
+  opacity: 1 !important;
+  visibility: visible !important;
+  grid-area: auto !important;
+  margin-bottom: 1.2em;
+}

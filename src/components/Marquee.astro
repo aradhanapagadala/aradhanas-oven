@@ -1,0 +1,109 @@
+---
+import { site } from '../config/site';
+import { cookieSVG } from '../lib/cookie';
+const looks = ['classic', 'strawberry', 'ube', 'peanut', 'toffee', 'pumpkin'] as const;
+const items = site.marquee;
+---
+
+<div class="mq" aria-hidden="true">
+  <div class="mq__band mq__band--a" data-marquee="1">
+    <div class="mq__track">
+      {
+        [0, 1].map((si) => (
+          <div class="mq__set">
+            {items.map((t, i) => (
+              <>
+                <span class="mq__txt">{t}</span>
+                <span class="mq__ck" set:html={cookieSVG(looks[i % looks.length], i + 20, { id: `mq-${si}-${i}`, shadow: false })} />
+              </>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="mq__band mq__band--b" data-marquee="-1">
+    <div class="mq__track">
+      {
+        [0, 1].map(() => (
+          <div class="mq__set">
+            {items.map((t) => (
+              <>
+                <span class="mq__txt">{t}</span>
+                <span class="mq__heart">♥</span>
+              </>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .mq {
+    position: relative;
+    z-index: 2;
+    height: clamp(170px, 18vw, 240px);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    margin-block: -30px;
+  }
+  .mq__band {
+    position: absolute;
+    left: -5%;
+    width: 110%;
+    overflow: hidden;
+    border-block: 3px solid var(--choco-900);
+  }
+  .mq__band--a {
+    rotate: -3.5deg;
+    background: var(--pink-500);
+    color: #fff;
+    z-index: 2;
+    box-shadow: 0 8px 0 var(--choco-900);
+  }
+  .mq__band--b {
+    rotate: 3deg;
+    background: var(--choco-800);
+    color: var(--butter);
+  }
+  .mq__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .mq__set {
+    display: flex;
+    align-items: center;
+    gap: clamp(18px, 2.4vw, 34px);
+    padding: 14px clamp(9px, 1.2vw, 17px);
+  }
+  .mq__txt {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.4rem, 1rem + 1.8vw, 2.5rem);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .mq__band--b .mq__txt {
+    font-family: var(--font-hand);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  }
+  .mq__ck {
+    flex: none;
+    width: clamp(40px, 4vw, 58px);
+  }
+  .mq__ck :global(svg) {
+    animation: o-spin 10s linear infinite;
+  }
+  .mq__heart {
+    color: var(--pink-400);
+    font-size: 1.6rem;
+  }
+  @keyframes o-spin {
+    to { rotate: 360deg; }
+  }
+</style>

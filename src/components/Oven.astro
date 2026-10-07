@@ -1,0 +1,195 @@
+---
+/* The oven mascot. Eyes follow the cursor, door can open (see bake section).
+   The cavity shows a dough ball that "bakes" into a cookie. */
+import { cookieSVG } from '../lib/cookie';
+interface Props {
+  class?: string;
+  id?: string;
+  cookie?: 'classic' | 'peanut' | 'strawberry' | 'ube' | 'toffee' | 'pumpkin';
+  label?: string;
+}
+const { class: cls = '', id, cookie = 'classic', label = 'a cute little pink oven with a happy face' } = Astro.props;
+const uid = id ?? 'oven';
+const baked = cookieSVG(cookie, 4, { id: `${uid}-ck`, shadow: false });
+const dough = cookieSVG('classic', 9, { id: `${uid}-dough`, shadow: false });
+---
+
+<div class:list={['oven', cls]} id={id} role="img" aria-label={label}>
+  <div class="oven__steam" aria-hidden="true">
+    <svg viewBox="0 0 24 22"><path d="M12 21 2.6 11.6A5.6 5.6 0 0 1 12 4.4a5.6 5.6 0 0 1 9.4 7.2Z" /></svg>
+    <svg viewBox="0 0 24 22"><path d="M12 21 2.6 11.6A5.6 5.6 0 0 1 12 4.4a5.6 5.6 0 0 1 9.4 7.2Z" /></svg>
+    <svg viewBox="0 0 24 22"><path d="M12 21 2.6 11.6A5.6 5.6 0 0 1 12 4.4a5.6 5.6 0 0 1 9.4 7.2Z" /></svg>
+  </div>
+
+  <svg class="oven__body" viewBox="0 0 300 340" aria-hidden="true">
+    <defs>
+      <radialGradient id={`${uid}-glow`} cx="50%" cy="62%" r="65%">
+        <stop offset="0" stop-color="#FFD27A" />
+        <stop offset=".45" stop-color="#FF8A3D" />
+        <stop offset="1" stop-color="#C2410C" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id={`${uid}-shell`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--pink-200)" />
+        <stop offset="1" stop-color="var(--pink-300)" />
+      </linearGradient>
+      <clipPath id={`${uid}-bodyclip`}><rect x="22" y="52" width="256" height="244" rx="46" /></clipPath>
+      <clipPath id={`${uid}-cav`}><rect x="46" y="164" width="208" height="112" rx="24" /></clipPath>
+    </defs>
+
+    <!-- feet -->
+    <rect x="62" y="280" width="46" height="34" rx="13" fill="var(--choco-700)" stroke="var(--choco-900)" stroke-width="6" />
+    <rect x="192" y="280" width="46" height="34" rx="13" fill="var(--choco-700)" stroke="var(--choco-900)" stroke-width="6" />
+
+    <!-- shell -->
+    <rect x="22" y="52" width="256" height="244" rx="46" fill={`url(#${uid}-shell)`} />
+    <g clip-path={`url(#${uid}-bodyclip)`}>
+      <rect x="22" y="52" width="256" height="60" fill="var(--pink-100)" />
+      <path d="M22 112H278" stroke="var(--choco-900)" stroke-width="5" />
+      <ellipse cx="70" cy="70" rx="40" ry="10" fill="#fff" opacity=".6" />
+      <rect x="22" y="278" width="256" height="20" fill="var(--pink-400)" opacity=".45" />
+    </g>
+    <rect x="22" y="52" width="256" height="244" rx="46" fill="none" stroke="var(--choco-900)" stroke-width="6" />
+
+    <!-- knobs + display -->
+    <g class="oven__knob" style="transform-origin: 66px 82px">
+      <circle cx="66" cy="82" r="15" fill="var(--cream)" stroke="var(--choco-900)" stroke-width="5" />
+      <path d="M66 82V71" stroke="var(--choco-900)" stroke-width="5" stroke-linecap="round" />
+    </g>
+    <g class="oven__knob oven__knob--2" style="transform-origin: 108px 82px">
+      <circle cx="108" cy="82" r="15" fill="var(--cream)" stroke="var(--choco-900)" stroke-width="5" />
+      <path d="M108 82V71" stroke="var(--choco-900)" stroke-width="5" stroke-linecap="round" />
+    </g>
+    <rect x="146" y="65" width="108" height="34" rx="12" fill="var(--choco-900)" />
+    <text class="oven__temp" x="200" y="89.5" text-anchor="middle">350°</text>
+
+    <!-- face -->
+    <g class="oven__face">
+      <g class="oven__eyes">
+        <g class="eye-open">
+          <ellipse cx="118" cy="136" rx="9" ry="11" fill="var(--choco-900)" />
+          <ellipse cx="182" cy="136" rx="9" ry="11" fill="var(--choco-900)" />
+          <circle cx="115" cy="131.5" r="3.4" fill="#fff" />
+          <circle cx="179" cy="131.5" r="3.4" fill="#fff" />
+        </g>
+        <g class="eye-happy" opacity="0">
+          <path d="M108 139q10-14 20 0M172 139q10-14 20 0" fill="none" stroke="var(--choco-900)" stroke-width="5" stroke-linecap="round" />
+        </g>
+      </g>
+      <ellipse cx="94" cy="149" rx="13" ry="7" fill="var(--pink-500)" opacity=".45" />
+      <ellipse cx="206" cy="149" rx="13" ry="7" fill="var(--pink-500)" opacity=".45" />
+      <path d="M138 144q6 8 12 0q6 8 12 0" fill="none" stroke="var(--choco-900)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- cavity (visible through the window, revealed when the door opens) -->
+    <g clip-path={`url(#${uid}-cav)`}>
+      <rect x="46" y="164" width="208" height="112" fill="var(--choco-900)" />
+      <rect class="oven__glow" x="30" y="150" width="240" height="140" fill={`url(#${uid}-glow)`} opacity=".35" />
+      <path class="oven__coil" d="M60 180l12 8 12-8 12 8 12-8 12 8 12-8 12 8 12-8 12 8 12-8 12 8 12-8 12 8 12-8" fill="none" stroke="#FF8A3D" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".55" />
+      <path d="M58 258H242" stroke="#9A5B3A" stroke-width="4" stroke-linecap="round" />
+      <g class="oven__dough" style="transform-origin: 150px 238px">
+        <svg x="124" y="212" width="52" height="52" viewBox="0 0 200 200" set:html={dough.replace(/^<svg[^>]*>|<\/svg>$/g, '')} />
+      </g>
+      <g class="oven__cookie" style="transform-origin: 150px 236px" opacity="0">
+        <svg x="114" y="200" width="72" height="72" viewBox="0 0 200 200" set:html={baked.replace(/^<svg[^>]*>|<\/svg>$/g, '')} />
+      </g>
+    </g>
+  </svg>
+
+  <!-- the door is its own layer so it can swing open in 3D -->
+  <div class="oven__door" aria-hidden="true">
+    <svg viewBox="46 164 208 112" overflow="visible">
+      <path
+        fill-rule="evenodd"
+        d="M70 164h160a24 24 0 0 1 24 24v64a24 24 0 0 1-24 24H70a24 24 0 0 1-24-24v-64a24 24 0 0 1 24-24ZM88 196a14 14 0 0 0-14 14v36a14 14 0 0 0 14 14h124a14 14 0 0 0 14-14v-36a14 14 0 0 0-14-14Z"
+        fill="var(--pink-300)"
+        stroke="var(--choco-900)"
+        stroke-width="5"
+      />
+      <rect x="74" y="196" width="152" height="64" rx="14" fill="#fff" opacity=".12" />
+      <path d="M92 252l34-48M112 252l20-28" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".45" />
+      <rect x="74" y="196" width="152" height="64" rx="14" fill="none" stroke="var(--choco-900)" stroke-width="5" />
+      <rect x="104" y="174" width="92" height="11" rx="5.5" fill="var(--cream)" stroke="var(--choco-900)" stroke-width="4" />
+    </svg>
+  </div>
+</div>
+
+<style>
+  .oven {
+    position: relative;
+    aspect-ratio: 300 / 340;
+    perspective: 900px;
+  }
+  .oven__body {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 18px 18px rgb(58 23 12 / 0.22));
+  }
+  .oven__temp {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    fill: var(--pink-300);
+    letter-spacing: 0.04em;
+  }
+  .oven__door {
+    position: absolute;
+    left: calc(46 / 300 * 100%);
+    top: calc(164 / 340 * 100%);
+    width: calc(208 / 300 * 100%);
+    height: calc(112 / 340 * 100%);
+    transform-origin: 50% 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .oven__door svg {
+    width: 100%;
+    height: 100%;
+  }
+  .oven__glow {
+    animation: glow 2.6s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    to {
+      opacity: 0.6;
+    }
+  }
+  .oven__eyes {
+    transition: transform 0.25s var(--ease-soft);
+  }
+  .eye-open {
+    animation: blink 5s infinite;
+    transform-origin: 150px 136px;
+  }
+  @keyframes blink {
+    0%, 46%, 50%, 100% { transform: scaleY(1); }
+    48% { transform: scaleY(0.1); }
+  }
+  .oven__steam {
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    width: 40%;
+    height: 22%;
+    translate: -50% -60%;
+    pointer-events: none;
+  }
+  .oven__steam svg {
+    position: absolute;
+    bottom: 0;
+    width: 22%;
+    fill: var(--pink-400);
+    stroke: #fff;
+    stroke-width: 2.5;
+    opacity: 0;
+    animation: steam 3.6s var(--ease-soft) infinite;
+  }
+  .oven__steam svg:nth-child(1) { left: 6%; }
+  .oven__steam svg:nth-child(2) { left: 40%; animation-delay: 1.2s; width: 16%; }
+  .oven__steam svg:nth-child(3) { left: 70%; animation-delay: 2.4s; }
+  @keyframes steam {
+    0% { opacity: 0; transform: translateY(40%) scale(0.4) rotate(-10deg); }
+    20% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-160%) scale(1) rotate(12deg); }
+  }
+</style>

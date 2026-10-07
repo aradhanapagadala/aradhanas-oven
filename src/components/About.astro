@@ -1,0 +1,255 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../config/site';
+import Sticker from './Sticker.astro';
+
+const a = site.about;
+
+/* scalloped "cookie-cutter" frame in 0..1 units so it scales with the photo */
+function scallop(cols: number, rows: number, inset = 0.035) {
+  const x0 = inset, y0 = inset, x1 = 1 - inset, y1 = 1 - inset;
+  const w = (x1 - x0) / cols, h = (y1 - y0) / rows;
+  const bx = inset * 0.95, by = inset * 0.95 * (cols / rows);
+  let d = `M${x0} ${y0}`;
+  for (let i = 0; i < cols; i++) d += `Q${x0 + w * (i + 0.5)} ${y0 - by * 2} ${x0 + w * (i + 1)} ${y0}`;
+  for (let i = 0; i < rows; i++) d += `Q${x1 + bx * 2} ${y0 + h * (i + 0.5)} ${x1} ${y0 + h * (i + 1)}`;
+  for (let i = cols; i > 0; i--) d += `Q${x0 + w * (i - 0.5)} ${y1 + by * 2} ${x0 + w * (i - 1)} ${y1}`;
+  for (let i = rows; i > 0; i--) d += `Q${x0 - bx * 2} ${y0 + h * (i - 0.5)} ${x0} ${y0 + h * (i - 1)}`;
+  return d + 'Z';
+}
+const frame = scallop(7, 9);
+---
+
+<section class="about" id="about" aria-labelledby="about-title">
+  <svg width="0" height="0" class="sr-only" aria-hidden="true">
+    <clipPath id="scallop" clipPathUnits="objectBoundingBox"><path d={frame}></path></clipPath>
+  </svg>
+
+  <div class="about__card wrap">
+    <div class="about__photo" data-reveal="photo">
+      <div class="about__frame about__frame--back" aria-hidden="true"></div>
+      <div class="about__frame">
+        <Image src={a.photo} alt={a.photoAlt} widths={[360, 540, 720]} sizes="(max-width: 760px) 80vw, 420px" format="webp" quality={86} loading="lazy" />
+      </div>
+      <span class="tape tape--1" aria-hidden="true"></span>
+      <span class="tape tape--2" aria-hidden="true"></span>
+      <Sticker kind="heart" class="about__s1" />
+      <Sticker kind="sparkle" class="about__s2" />
+      <Sticker kind="cupcake" class="about__s3" />
+      <p class="about__caption hand">
+        <svg viewBox="0 0 60 50" aria-hidden="true"><path d="M54 44C40 44 18 38 12 8m0 0L4 18m8-10 8 9" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" data-draw></path></svg>
+        {a.photoCaption}
+      </p>
+    </div>
+
+    <div class="about__text">
+      <p class="kicker">{a.kicker}</p>
+      <h2 class="about__title display puffy" id="about-title" data-split>{a.heading}</h2>
+
+      <ul class="bubbles" role="list">
+        {
+          a.bubbles.map((b, i) => (
+            <li class="bubble" data-bubble style={`--i:${i}`} data-cursor="drag me">
+              <span class="bubble__gloss" aria-hidden="true" />
+              <span class="bubble__text">{b}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="about__sign hand" data-reveal="sign">
+        {a.signoff}
+        <svg viewBox="0 0 40 36" aria-hidden="true"><path d="M20 33 4.6 17.8A9 9 0 0 1 20 6.6a9 9 0 0 1 15.4 11.2Z" fill="var(--pink-400)" stroke="var(--choco-900)" stroke-width="3"></path></svg>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding: clamp(80px, 10vw, 140px) 0;
+  }
+  .about__card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 6vw, 90px);
+    align-items: center;
+    padding: clamp(36px, 6vw, 80px);
+    border: 3px solid var(--choco-900);
+    border-radius: var(--r-lg);
+    background:
+      radial-gradient(circle at 1px 1px, rgb(58 23 12 / 0.08) 1.2px, transparent 1.5px) 0 0 / 18px 18px,
+      var(--cream);
+    box-shadow: 0 10px 0 var(--choco-900);
+  }
+  /* scalloped lace edge on top of the card */
+  .about__card::before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: -17px;
+    height: 18px;
+    background: radial-gradient(circle at 50% 100%, var(--pink-300) 9px, var(--choco-900) 9.5px 12px, transparent 12.5px) 0 0 / 30px 18px repeat-x;
+  }
+
+  .about__photo {
+    position: relative;
+    justify-self: center;
+    width: min(420px, 100%);
+  }
+  .about__frame {
+    position: relative;
+    aspect-ratio: 692 / 922;
+    clip-path: url(#scallop);
+    background: var(--pink-300);
+  }
+  .about__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.04);
+  }
+  .about__frame--back {
+    position: absolute;
+    inset: 0;
+    background: var(--pink-400);
+    translate: 16px 16px;
+    rotate: 5deg;
+  }
+  .about__frame:not(.about__frame--back) {
+    rotate: -3deg;
+  }
+  .tape {
+    position: absolute;
+    width: 120px;
+    height: 34px;
+    background: repeating-linear-gradient(90deg, rgb(255 176 216 / 0.85) 0 10px, rgb(255 255 255 / 0.75) 10px 20px);
+    box-shadow: 0 2px 4px rgb(58 23 12 / 0.12);
+    mask: linear-gradient(90deg, transparent 0 3px, #000 3px calc(100% - 3px), transparent 0) ;
+  }
+  .tape--1 { top: -12px; left: 10%; rotate: -14deg; }
+  .tape--2 { top: -6px; right: 4%; rotate: 18deg; width: 96px; background: repeating-linear-gradient(90deg, rgb(201 179 247 / 0.9) 0 10px, rgb(255 255 255 / 0.75) 10px 20px); }
+
+  .about__photo :global(.about__s1) { position: absolute; width: 64px; right: -22px; top: 22%; rotate: 14deg; }
+  .about__photo :global(.about__s2) { position: absolute; width: 44px; left: -20px; top: 44%; }
+  .about__photo :global(.about__s3) { position: absolute; width: 74px; left: -26px; bottom: -18px; rotate: -10deg; }
+
+  .about__caption {
+    position: absolute;
+    right: -24px;
+    bottom: -84px;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin: 0;
+    max-width: 230px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--pink-600);
+    rotate: -4deg;
+  }
+  .about__caption svg {
+    flex: none;
+    width: 46px;
+    color: var(--choco-900);
+    translate: 0 -14px;
+  }
+
+  .about__title {
+    margin: 0.2em 0 0.55em;
+    font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem);
+    --puffy-fill: var(--pink-500);
+  }
+
+  .bubbles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .bubble {
+    position: relative;
+    width: fit-content;
+    max-width: min(25ch, 100%);
+    padding: 16px 24px 18px;
+    border: 3px solid var(--choco-900);
+    border-radius: 30px 30px 30px 8px;
+    background: radial-gradient(120% 140% at 30% 0%, var(--choco-500), var(--choco-700) 55%, var(--choco-800));
+    color: var(--cream);
+    font-size: clamp(1.08rem, 1rem + 0.4vw, 1.3rem);
+    line-height: 1.32;
+    box-shadow: 0 4px 0 var(--choco-900), 0 12px 20px rgb(58 23 12 / 0.12);
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+  }
+  .bubble:nth-child(even) {
+    justify-self: end;
+    border-radius: 30px 30px 8px 30px;
+    background: radial-gradient(120% 140% at 30% 0%, var(--pink-400), var(--pink-500) 55%, var(--pink-600));
+    color: #fff;
+  }
+  .bubble:nth-child(1) { rotate: -1.5deg; }
+  .bubble:nth-child(2) { rotate: 1.8deg; }
+  .bubble:nth-child(3) { rotate: -1deg; margin-left: 6%; }
+  .bubble:nth-child(4) { rotate: 2deg; }
+  .bubble__gloss {
+    position: absolute;
+    left: 18px;
+    top: 7px;
+    width: 46px;
+    height: 9px;
+    border-radius: 9px;
+    background: rgb(255 255 255 / 0.35);
+    rotate: -6deg;
+  }
+  .bubble__text {
+    position: relative;
+  }
+
+  .about__sign {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 1.2em 0 0;
+    font-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.6rem);
+    font-weight: 700;
+    color: var(--choco-900);
+    rotate: -3deg;
+  }
+  .about__sign svg {
+    width: 38px;
+    animation: beat 1.4s var(--ease-pop) infinite;
+  }
+  @keyframes beat {
+    0%, 60%, 100% { scale: 1; }
+    30% { scale: 1.25; }
+  }
+
+  @media (max-width: 860px) {
+    .about__card {
+      grid-template-columns: 1fr;
+      padding: 40px 22px 44px;
+    }
+    .about__photo {
+      width: min(330px, 82%);
+      margin-bottom: 10px;
+    }
+    .about__caption {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      max-width: none;
+      justify-content: center;
+      margin-top: 26px;
+      rotate: -2deg;
+    }
+    .bubble:nth-child(3) {
+      margin-left: 0;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+import Sky from '../components/Sky.astro';
+import Preloader from '../components/Preloader.astro';
+import Nav from '../components/Nav.astro';
+import Cursor from '../components/Cursor.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <meta name="theme-color" content="#efe7ff" />
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} type="image/svg+xml" />
+    <script is:inline>
+      // flag JS + motion prefs before paint so nothing flashes
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('reduced');
+        try {
+          if (sessionStorage.getItem('ao-preheated')) d.classList.add('no-pre');
+        } catch (e) {}
+        // safety net: never leave content hidden if scripts fail
+        setTimeout(function () {
+          if (!d.classList.contains('ready')) d.classList.remove('js');
+        }, 6000);
+      })();
+    </script>
+  </head>
+  <body>
+    <Preloader />
+    <Sky />
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <slot name="footer" />
+    <Cursor />
+    <div class="grain" aria-hidden="true"></div>
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

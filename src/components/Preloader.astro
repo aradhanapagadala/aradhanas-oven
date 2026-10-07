@@ -1,0 +1,79 @@
+---
+import { cookieSVG } from '../lib/cookie';
+const ck = cookieSVG('strawberry', 3, { id: 'pre-ck', shadow: false });
+---
+
+<div class="pre" id="preloader" aria-hidden="true">
+  <div class="pre__inner">
+    <div class="pre__cookie" set:html={ck} />
+    <p class="pre__label hand">preheating the oven …</p>
+    <p class="pre__temp display"><span id="pre-temp">0</span>°F</p>
+    <div class="pre__bar"><i id="pre-bar"></i></div>
+  </div>
+  <svg class="pre__edge" viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path id="pre-edge" d="M0 0H1440V0Q720 0 0 0Z" fill="var(--pink-200)"></path>
+  </svg>
+</div>
+
+<style>
+  .pre {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: var(--pink-200);
+    color: var(--choco-900);
+  }
+  html:not(.js) .pre,
+  html.no-pre .pre {
+    display: none;
+  }
+  .pre__inner {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .pre__cookie {
+    width: 96px;
+    animation: pre-spin 2.2s linear infinite;
+  }
+  @keyframes pre-spin {
+    to { rotate: 360deg; }
+  }
+  .pre__label {
+    margin: 10px 0 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--pink-600);
+  }
+  .pre__temp {
+    margin: 0;
+    font-size: clamp(3rem, 2rem + 4vw, 5rem);
+    font-variant-numeric: tabular-nums;
+  }
+  .pre__bar {
+    width: min(260px, 70vw);
+    height: 14px;
+    border: 3px solid var(--choco-900);
+    border-radius: 99px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .pre__bar i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform-origin: left;
+    transform: scaleX(0);
+    background: repeating-linear-gradient(-45deg, var(--pink-500) 0 10px, var(--pink-400) 10px 20px);
+  }
+  .pre__edge {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 120px;
+  }
+</style>

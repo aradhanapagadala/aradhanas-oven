@@ -1,0 +1,92 @@
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__ring"><span class="cursor__label" id="cursor-label"></span></div>
+  <svg class="cursor__heart" viewBox="0 0 24 22"><path d="M12 21 2.6 11.6A5.6 5.6 0 0 1 12 4.4a5.6 5.6 0 0 1 9.4 7.2Z"></path></svg>
+</div>
+<div class="sprinkles" id="sprinkles" aria-hidden="true"></div>
+
+<style>
+  .cursor {
+    display: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    html.js .cursor {
+      display: block;
+    }
+    html.js.has-cursor,
+    html.js.has-cursor * {
+      cursor: none !important;
+    }
+  }
+  .cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 90;
+    pointer-events: none;
+  }
+  .cursor__heart {
+    position: absolute;
+    width: 18px;
+    translate: -50% -50%;
+    fill: var(--pink-500);
+    stroke: #fff;
+    stroke-width: 2.4;
+    filter: drop-shadow(0 2px 0 var(--choco-900));
+  }
+  .cursor__ring {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    translate: -50% -50%;
+    border: 2.5px dashed var(--pink-500);
+    border-radius: 50%;
+    transition:
+      width 0.4s var(--ease-pop),
+      height 0.4s var(--ease-pop),
+      background 0.3s,
+      border-color 0.3s;
+    animation: ring-spin 8s linear infinite;
+  }
+  .cursor.is-hover .cursor__ring {
+    width: 84px;
+    height: 84px;
+    border-style: solid;
+    border-color: var(--choco-900);
+    background: var(--pink-300);
+    animation: none;
+  }
+  .cursor__label {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--choco-900);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .cursor.is-hover .cursor__label {
+    opacity: 1;
+  }
+  .cursor.is-hover .cursor__heart {
+    opacity: 0;
+  }
+  @keyframes ring-spin {
+    to { rotate: 360deg; }
+  }
+  .sprinkles {
+    position: fixed;
+    inset: 0;
+    z-index: 89;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .sprinkles :global(i) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 4.5px;
+    border-radius: 9px;
+  }
+</style>

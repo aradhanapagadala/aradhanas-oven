@@ -1,0 +1,133 @@
+---
+import { site } from '../config/site';
+const j = site.jar;
+---
+
+<section class="jar" id="jar" aria-labelledby="jar-title">
+  <div class="wrap jar__wrap">
+    <div class="jar__copy">
+      <p class="kicker">{j.kicker}</p>
+      <h2 class="jar__title display puffy" id="jar-title" data-split>{j.heading}</h2>
+      <p class="jar__hint" data-hint-mouse={j.hintMouse} data-hint-touch={j.hintTouch}>{j.hintMouse}</p>
+      <div class="jar__btns">
+        <button class="btn" type="button" id="jar-shake" data-cursor="shake!">
+          {j.shake}
+        </button>
+        <button class="btn btn--cream" type="button" id="jar-reset" data-cursor="bye!">{j.reset}</button>
+      </div>
+      <p class="jar__count hand"><b id="jar-count">0</b> cookies in the jar</p>
+    </div>
+
+    <div class="jar__glass" id="jar-stage">
+      <svg class="jar__back" viewBox="0 0 400 480" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M70 70h260v26c40 18 54 50 54 96v220c0 34-26 60-60 60H76c-34 0-60-26-60-60V192c0-46 14-78 54-96Z" fill="rgb(255 255 255 / .35)" />
+      </svg>
+      <canvas id="jar-canvas" aria-label="a glass jar full of cookies you can play with" role="img"></canvas>
+      <svg class="jar__front" viewBox="0 0 400 480" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M70 70h260v26c40 18 54 50 54 96v220c0 34-26 60-60 60H76c-34 0-60-26-60-60V192c0-46 14-78 54-96Z" fill="none" stroke="var(--choco-900)" stroke-width="6" vector-effect="non-scaling-stroke" />
+        <path d="M44 210c0-30 6-52 26-66M42 250v120" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".7" vector-effect="non-scaling-stroke" />
+        <rect x="56" y="24" width="288" height="56" rx="16" fill="var(--pink-400)" stroke="var(--choco-900)" stroke-width="6" vector-effect="non-scaling-stroke" />
+        <path d="M80 40h120" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".6" vector-effect="non-scaling-stroke" />
+      </svg>
+      <div class="jar__label display" aria-hidden="true">cookies<small>♥ for sharing ♥</small></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .jar {
+    padding: clamp(80px, 9vw, 130px) 0 clamp(120px, 14vw, 200px);
+    background:
+      radial-gradient(circle at 10px 10px, rgb(255 255 255 / 0.7) 5px, transparent 5.5px) 0 0 / 40px 40px,
+      var(--pink-200);
+    border-top: 3px solid var(--choco-900);
+  }
+  .jar__wrap {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(30px, 5vw, 80px);
+    align-items: center;
+  }
+  .jar__title {
+    margin: 0.15em 0 0.35em;
+    font-size: clamp(2.6rem, 1.6rem + 4vw, 5.2rem);
+    --puffy-fill: var(--pink-500);
+  }
+  .jar__hint {
+    margin: 0 0 1.4em;
+    color: var(--ink-soft);
+  }
+  .jar__btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .jar__count {
+    margin: 1.2em 0 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+  .jar__count b {
+    display: inline-block;
+    min-width: 1.4em;
+    color: var(--pink-600);
+    font-size: 1.3em;
+  }
+
+  .jar__glass {
+    position: relative;
+    justify-self: center;
+    width: min(480px, 100%);
+    aspect-ratio: 400 / 480;
+    user-select: none;
+  }
+  .jar__back,
+  .jar__front,
+  #jar-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .jar__front {
+    pointer-events: none;
+    overflow: visible;
+  }
+  .jar__back {
+    filter: drop-shadow(0 16px 0 rgb(58 23 12 / 0.15));
+  }
+  #jar-canvas {
+    touch-action: pan-y;
+  }
+  .jar__label {
+    position: absolute;
+    left: 50%;
+    bottom: 20%;
+    translate: -50% 0;
+    rotate: -4deg;
+    display: grid;
+    justify-items: center;
+    padding: 10px 22px 8px;
+    border: 3px solid var(--choco-900);
+    border-radius: 16px;
+    background: var(--cream);
+    font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem);
+    line-height: 1;
+    pointer-events: none;
+    opacity: 0.94;
+  }
+  .jar__label small {
+    font-family: var(--font-hand);
+    font-size: 0.6em;
+    color: var(--pink-600);
+  }
+
+  @media (max-width: 860px) {
+    .jar__wrap {
+      grid-template-columns: 1fr;
+    }
+    .jar__glass {
+      width: min(400px, 100%);
+    }
+  }
+</style>
