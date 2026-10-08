@@ -136,7 +136,7 @@ export const site = {
 
   order: {
     heading: 'be the first to know',
-    text: 'orders open very soon. send me a message and i’ll save you a warm batch.',
+    text: 'orders open very soon — pop it in your calendar and come grab a warm batch.',
     // ▸ the countdown. set the exact moment orders open (with your timezone offset).
     //   "-04:00" = eastern daylight time, "-05:00" = eastern standard time.
     countdown: {
@@ -145,9 +145,6 @@ export const site = {
       openNow: 'orders are open! 🎉',
       remind: 'add to my calendar',
     },
-    // ▸ put your real links here
-    primary: { label: 'dm me on instagram', href: 'https://instagram.com/' },
-    secondary: { label: 'send an email', href: 'mailto:hello@aradhanasoven.com' },
   },
 
   footer: {

@@ -99,11 +99,6 @@ const stamp = Array.from({ length: 3 }, () => `${m.status} ✿ `).join('');
             <button type="button" class="cd__ics" data-ics data-cursor="yay!">{cd.remind}</button>
           </p>
         </div>
-
-        <div class="order__btns">
-          <a class="btn btn--cream" href={site.order.primary.href} target="_blank" rel="noopener" data-cursor="hi!">{site.order.primary.label}</a>
-          <a class="btn btn--lav" href={site.order.secondary.href} data-cursor="hi!">{site.order.secondary.label}</a>
-        </div>
       </div>
     </aside>
   </div>
@@ -366,15 +361,10 @@ const stamp = Array.from({ length: 3 }, () => `${m.status} ✿ `).join('');
     max-width: 46ch;
     font-size: 1.1rem;
   }
-  .order__btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
 
   /* ── countdown: little brownie tiles ── */
   .cd {
-    margin: 0 0 1.5em;
+    margin: 0;
   }
   .cd .cd__label {
     margin: 0 0 0.35em;
@@ -506,7 +496,6 @@ const stamp = Array.from({ length: 3 }, () => `${m.status} ✿ `).join('');
       justify-items: center;
       text-align: center;
     }
-    .order__btns,
     .cd__tiles,
     .cd__when {
       justify-content: center;
