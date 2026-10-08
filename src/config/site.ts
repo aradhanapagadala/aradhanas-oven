@@ -75,58 +75,51 @@ export const site = {
 
   menu: {
     kicker: 'ordering & menu <3',
-    heading: 'the cookie menu',
+    heading: 'the sweets menu',
     status: 'orders open soon!',
-    note: 'flavors rotate with the seasons. tap a cookie to take a bite :)',
+    note: 'small batches, baked fresh. tap a treat to take a bite :)',
   },
 
-  // ▸ your flavors. add, remove or reorder freely.
+  // ▸ your treats. add, remove or reorder freely.
+  //   look: chocchip | brownie | reeses | toffee | pumpkinswirl  (see src/lib/cookie.ts)
   cookies: [
     {
-      id: 'og-chunk',
-      name: 'the og chunk',
-      blurb: 'brown butter dough, puddles of dark chocolate, a pinch of flaky salt.',
-      look: 'classic',
-      tags: ['bestseller', 'gooey'],
+      id: 'choc-chip',
+      name: 'chocolate chip cookies',
+      blurb: 'the classic — golden, buttery edges, a soft gooey middle and lots of chocolate chips.',
+      look: 'chocchip',
+      tags: ['the classic', 'bestseller'],
       tint: '#FFE9C7',
     },
     {
-      id: 'pb-party',
-      name: 'pb cup party',
-      blurb: 'peanut butter dough loaded with candy pieces and chopped pb cups.',
-      look: 'peanut',
+      id: 'brownies',
+      name: 'brownies',
+      blurb: 'rich, dense and fudgy with that crackly, shiny top. corner piece or middle? you choose.',
+      look: 'brownie',
+      tags: ['fudgy', 'chocolate lover'],
+      tint: '#F1DCD0',
+    },
+    {
+      id: 'reeses-pb',
+      name: 'reese’s peanut butter cookies',
+      blurb: 'soft peanut butter cookies packed with chopped reese’s cups and pieces.',
+      look: 'reeses',
       tags: ['crowd fave'],
       tint: '#FFE0CC',
     },
     {
-      id: 'strawberry-cloud',
-      name: 'strawberry milk cloud',
-      blurb: 'soft pink strawberry dough, white chocolate chips, freeze-dried berries.',
-      look: 'strawberry',
-      tags: ['new', 'pretty in pink'],
-      tint: '#FFD9EB',
-    },
-    {
-      id: 'ube-crinkle',
-      name: 'ube crinkle dream',
-      blurb: 'purple yam crinkle, fudgy center, snowy powdered sugar coat.',
-      look: 'ube',
-      tags: ['fudgy'],
-      tint: '#E7DCFF',
-    },
-    {
       id: 'toffee-crunch',
-      name: 'salted toffee crunch',
-      blurb: 'dark brown sugar dough, buttery toffee bits, milk chocolate chunks.',
+      name: 'toffee crunch cookies',
+      blurb: 'brown sugar dough loaded with buttery toffee bits and chocolate, finished with flaky salt.',
       look: 'toffee',
       tags: ['crunchy edges'],
       tint: '#F7E2CF',
     },
     {
-      id: 'pumpkin-hug',
-      name: 'pumpkin spice hug',
-      blurb: 'warm pumpkin dough rolled in cinnamon sugar, white chocolate drizzle.',
-      look: 'pumpkin',
+      id: 'choc-pumpkin-swirl',
+      name: 'chocolate pumpkin swirl cookies',
+      blurb: 'spiced pumpkin dough with a ribbon of chocolate swirled through — fall in a cookie.',
+      look: 'pumpkinswirl',
       tags: ['seasonal 🎃', 'limited'],
       tint: '#FFDCC4',
     },
@@ -144,6 +137,14 @@ export const site = {
   order: {
     heading: 'be the first to know',
     text: 'orders open very soon. send me a message and i’ll save you a warm batch.',
+    // ▸ the countdown. set the exact moment orders open (with your timezone offset).
+    //   "-04:00" = eastern daylight time, "-05:00" = eastern standard time.
+    countdown: {
+      opensAt: '2026-11-01T10:00:00-05:00',
+      label: 'orders open in',
+      openNow: 'orders are open! 🎉',
+      remind: 'add to my calendar',
+    },
     // ▸ put your real links here
     primary: { label: 'dm me on instagram', href: 'https://instagram.com/' },
     secondary: { label: 'send an email', href: 'mailto:hello@aradhanasoven.com' },

@@ -1,78 +1,45 @@
-<div class="cursor" id="cursor" aria-hidden="true">
-  <div class="cursor__ring"><span class="cursor__label" id="cursor-label"></span></div>
-  <svg class="cursor__heart" viewBox="0 0 24 22"><path d="M12 21 2.6 11.6A5.6 5.6 0 0 1 12 4.4a5.6 5.6 0 0 1 9.4 7.2Z"></path></svg>
-</div>
+<!-- The real system pointer stays in charge (styled pink in global.css, zero lag).
+     This tag only appears beside it on playful elements: "nom!", "drag me"… -->
+<div class="ctag" id="cursor-tag" aria-hidden="true"><span id="cursor-label"></span></div>
 <div class="sprinkles" id="sprinkles" aria-hidden="true"></div>
 
 <style>
-  .cursor {
-    display: none;
-  }
-  @media (hover: hover) and (pointer: fine) {
-    html.js .cursor {
-      display: block;
-    }
-    html.js.has-cursor,
-    html.js.has-cursor * {
-      cursor: none !important;
-    }
-  }
-  .cursor {
+  .ctag {
     position: fixed;
     left: 0;
     top: 0;
     z-index: 90;
     pointer-events: none;
+    display: none;
   }
-  .cursor__heart {
-    position: absolute;
-    width: 18px;
-    translate: -50% -50%;
-    fill: var(--pink-500);
-    stroke: #fff;
-    stroke-width: 2.4;
-    filter: drop-shadow(0 2px 0 var(--choco-900));
+  @media (hover: hover) and (pointer: fine) {
+    html.js .ctag {
+      display: block;
+    }
   }
-  .cursor__ring {
-    position: absolute;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    translate: -50% -50%;
-    border: 2.5px dashed var(--pink-500);
-    border-radius: 50%;
-    transition:
-      width 0.4s var(--ease-pop),
-      height 0.4s var(--ease-pop),
-      background 0.3s,
-      border-color 0.3s;
-    animation: ring-spin 8s linear infinite;
-  }
-  .cursor.is-hover .cursor__ring {
-    width: 84px;
-    height: 84px;
-    border-style: solid;
-    border-color: var(--choco-900);
+  .ctag span {
+    display: inline-block;
+    padding: 5px 11px 6px;
+    border: 2.5px solid var(--choco-900);
+    border-radius: 999px 999px 999px 6px;
     background: var(--pink-300);
-    animation: none;
-  }
-  .cursor__label {
+    color: var(--choco-900);
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 0.85rem;
-    color: var(--choco-900);
-    opacity: 0;
-    transition: opacity 0.2s;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 3px 0 var(--choco-900);
+    transform-origin: 0 100%;
+    scale: 0;
+    rotate: -8deg;
+    transition:
+      scale 0.28s var(--ease-pop),
+      rotate 0.28s var(--ease-pop);
   }
-  .cursor.is-hover .cursor__label {
-    opacity: 1;
-  }
-  .cursor.is-hover .cursor__heart {
-    opacity: 0;
-  }
-  @keyframes ring-spin {
-    to { rotate: 360deg; }
+  .ctag.is-on span {
+    scale: 1;
+    rotate: -4deg;
   }
   .sprinkles {
     position: fixed;

@@ -1,12 +1,12 @@
 /* The cookie jar: real physics with matter-js, drawn on a canvas with our illustrated cookies. */
 import Matter from 'matter-js';
-import { cookieSVG, LOOKS, type CookieLook } from '../lib/cookie';
+import { cookieSVG, RECIPES, type CookieLook } from '../lib/cookie';
 
-type Deps = { reduced: boolean; fine: boolean; sound: { pop(): void; crunch(): void }; gsap: typeof import('gsap').gsap };
+type Deps = { reduced: boolean; fine: boolean; sound: { pop(): void; crunch(): void }; gsap: typeof import('gsap').gsap; looks: CookieLook[] };
 
 const { Engine, Bodies, Composite, Body, Query, Constraint, Sleeping } = Matter;
 
-export function initJar({ reduced, sound, gsap }: Deps) {
+export function initJar({ reduced, sound, gsap, looks }: Deps) {
   const stage = document.getElementById('jar-stage')!;
   const canvas = document.getElementById('jar-canvas') as HTMLCanvasElement;
   const countEl = document.getElementById('jar-count')!;
@@ -15,13 +15,14 @@ export function initJar({ reduced, sound, gsap }: Deps) {
   const touchFirst = matchMedia('(pointer: coarse)').matches;
   if (touchFirst && hint) hint.textContent = hint.dataset.hintTouch ?? hint.textContent;
 
-  // pre-render a few variants of every cookie as images
-  const sprites: HTMLImageElement[] = [];
-  LOOKS.forEach((look: CookieLook, li) => {
+  // pre-render a couple of variants of every treat on the menu as images
+  type Sprite = { img: HTMLImageElement; square: boolean };
+  const sprites: Sprite[] = [];
+  (looks.length ? looks : (['chocchip'] as CookieLook[])).forEach((look, li) => {
     for (let s = 0; s < 2; s++) {
       const img = new Image();
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(cookieSVG(look, 40 + li * 3 + s, { id: `jar-${look}-${s}`, shadow: false }));
-      sprites.push(img);
+      sprites.push({ img, square: RECIPES[look].shape === 'square' });
     }
   });
 
@@ -29,7 +30,7 @@ export function initJar({ reduced, sound, gsap }: Deps) {
   engine.gravity.y = 1.1;
   let W = 0, H = 0, dpr = 1, unit = 1;
   let walls: Matter.Body[] = [];
-  const cookies: (Matter.Body & { sprite?: HTMLImageElement; r?: number })[] = [];
+  const cookies: (Matter.Body & { sprite?: Sprite; r?: number })[] = [];
   const MAX = 36;
 
   const updateCount = () => (countEl.textContent = String(cookies.length));
@@ -65,15 +66,13 @@ export function initJar({ reduced, sound, gsap }: Deps) {
   }
 
   function add(x?: number, y?: number) {
+    const sprite = sprites[Math.floor(Math.random() * sprites.length)];
     const r = (28 + Math.random() * 14) * unit;
-    const b = Bodies.circle(x ?? (130 + Math.random() * 140) * unit, y ?? -r * 2, r, {
-      restitution: 0.35,
-      friction: 0.25,
-      frictionAir: 0.012,
-      density: 0.002,
-      angle: Math.random() * Math.PI * 2,
-    }) as (typeof cookies)[number];
-    b.sprite = sprites[Math.floor(Math.random() * sprites.length)];
+    const px = x ?? (130 + Math.random() * 140) * unit, py = y ?? -r * 2;
+    const opts = { restitution: 0.3, friction: 0.3, frictionAir: 0.012, density: 0.002, angle: Math.random() * Math.PI * 2 };
+    // brownies are little squares (the slab fills ~82% of its art box)
+    const b = (sprite.square ? Bodies.rectangle(px, py, r * 1.64, r * 1.64, { ...opts, chamfer: { radius: r * 0.3 } }) : Bodies.circle(px, py, r, opts)) as (typeof cookies)[number];
+    b.sprite = sprite;
     b.r = r;
     Body.setAngularVelocity(b, (Math.random() - 0.5) * 0.2);
     Composite.add(engine.world, b);
@@ -86,7 +85,7 @@ export function initJar({ reduced, sound, gsap }: Deps) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     for (const b of cookies) {
-      if (!b.sprite?.complete) continue;
+      if (!b.sprite?.img.complete) continue;
       const r = b.r!;
       ctx.save();
       ctx.translate(b.position.x, b.position.y);
@@ -94,7 +93,8 @@ export function initJar({ reduced, sound, gsap }: Deps) {
       ctx.shadowColor = 'rgba(58,23,12,.25)';
       ctx.shadowBlur = 8;
       ctx.shadowOffsetY = 4;
-      ctx.drawImage(b.sprite, -r * 1.08, -r * 1.08, r * 2.16, r * 2.16);
+      const k = b.sprite.square ? 1.0 : 1.08;
+      ctx.drawImage(b.sprite.img, -r * k, -r * k, r * k * 2, r * k * 2);
       ctx.restore();
     }
   }

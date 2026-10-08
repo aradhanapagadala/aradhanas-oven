@@ -4,7 +4,7 @@ import { cookieSVG } from '../lib/cookie';
 import Oven from './Oven.astro';
 import Sticker from './Sticker.astro';
 
-const o = cookieSVG('strawberry', 11, { id: 'hero-o', shadow: false });
+const o = cookieSVG('chocchip', 11, { id: 'hero-o', shadow: false });
 const ribbonText = Array.from({ length: 8 }, () => `${site.hero.tagline} ✿ `).join('');
 ---
 
@@ -24,9 +24,9 @@ const ribbonText = Array.from({ length: 8 }, () => `${site.hero.tagline} ✿ `).
 
   <!-- floating stickers (data-depth = how much they drift with the mouse) -->
   <div class="hero__float" aria-hidden="true">
-    <Sticker kind="cookie" look="classic" seed={2} class="f f1" data-depth="0.9" />
-    <Sticker kind="cookie" look="ube" seed={5} class="f f2" data-depth="0.6" />
-    <Sticker kind="cookie" look="peanut" seed={3} class="f f3" data-depth="1.2" />
+    <Sticker kind="cookie" look="chocchip" seed={2} class="f f1" data-depth="0.9" />
+    <Sticker kind="cookie" look="brownie" seed={5} class="f f2" data-depth="0.6" />
+    <Sticker kind="cookie" look="reeses" seed={3} class="f f3" data-depth="1.2" />
     <Sticker kind="heart" class="f f4" data-depth="1.6" />
     <Sticker kind="sparkle" class="f f5" data-depth="0.5" />
     <Sticker kind="whisk" class="f f6" data-depth="0.8" />
@@ -66,7 +66,7 @@ const ribbonText = Array.from({ length: 8 }, () => `${site.hero.tagline} ✿ `).
   </div>
 
   <div class="hero__oven" data-hero="oven" data-depth="0.4">
-    <Oven id="hero-oven" cookie="strawberry" />
+    <Oven id="hero-oven" cookie="chocchip" />
   </div>
 
   <a class="hero__scroll hand" href="#about" data-scroll-to="#about">

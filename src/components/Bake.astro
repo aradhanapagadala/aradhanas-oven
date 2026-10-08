@@ -5,8 +5,8 @@ import Oven from './Oven.astro';
 import Sticker from './Sticker.astro';
 
 const b = site.bake;
-const flyCookie = cookieSVG('classic', 4, { id: 'bake-fly', shadow: false });
-const doughBall = (i: number) => cookieSVG('classic', 30 + i, { id: `tray-${i}`, shadow: false });
+const flyCookie = cookieSVG('chocchip', 4, { id: 'bake-fly', shadow: false });
+const doughBall = (i: number) => cookieSVG('chocchip', 30 + i, { id: `tray-${i}`, shadow: false });
 ---
 
 <section class="bake" id="bake" aria-labelledby="bake-title">
@@ -49,7 +49,7 @@ const doughBall = (i: number) => cookieSVG('classic', 30 + i, { id: `tray-${i}`,
           {[0, 1, 2].map(() => <svg viewBox="0 0 20 60"><path d="M10 58c-8-8 8-14 0-22s8-14 0-22 8-12 0-12" fill="none" stroke="var(--pink-300)" stroke-width="4" stroke-linecap="round" /></svg>)}
         </div>
 
-        <Oven id="bake-oven" class="bake__oven" cookie="classic" label="the oven baking a cookie" />
+        <Oven id="bake-oven" class="bake__oven" cookie="chocchip" label="the oven baking a cookie" />
 
         <div class="ding display" data-b="ding">{b.done}</div>
         <div class="fly" data-b="fly" set:html={flyCookie} />

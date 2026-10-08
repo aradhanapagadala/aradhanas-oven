@@ -18,7 +18,8 @@ const rand = gsap.utils.random;
 /* ── smooth scroll ─────────────────────────────── */
 let lenis: Lenis | null = null;
 if (!reduced) {
-  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.95 });
+  // light smoothing: still silky, but the page stops when the wheel/trackpad stops
+  lenis = new Lenis({ lerp: 0.2, wheelMultiplier: 1, syncTouch: false });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis!.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
@@ -60,29 +61,25 @@ window.addEventListener('pointerdown', (e) => {
   sprinkle(e.clientX, e.clientY, 10, 70);
 });
 
-/* ── custom cursor ─────────────────────────────── */
+/* ── cursor label ──────────────────────────────── */
+// The real pointer is untouched (styled in CSS). A tiny tag follows it only on playful elements.
 function initCursor() {
-  const cur = $('#cursor');
+  const tag = $('#cursor-tag');
   const label = $('#cursor-label');
-  if (!fine || !cur || !label || reduced) return;
-  html.classList.add('has-cursor');
-  const heart = $('.cursor__heart', cur)!;
-  const ring = $('.cursor__ring', cur)!;
-  gsap.set([heart, ring], { x: innerWidth / 2, y: innerHeight / 2 });
-  const hx = gsap.quickTo(heart, 'x', { duration: 0.08 });
-  const hy = gsap.quickTo(heart, 'y', { duration: 0.08 });
-  const rx = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power3' });
-  const ry = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3' });
+  if (!fine || !tag || !label) return;
+  const tx = gsap.quickTo(tag, 'x', { duration: reduced ? 0 : 0.18, ease: 'power3' });
+  const ty = gsap.quickTo(tag, 'y', { duration: reduced ? 0 : 0.18, ease: 'power3' });
   window.addEventListener('pointermove', (e) => {
-    hx(e.clientX); hy(e.clientY); rx(e.clientX); ry(e.clientY);
+    if (e.pointerType !== 'mouse') return;
+    tx(e.clientX + 18);
+    ty(e.clientY + 20);
   });
   document.addEventListener('pointerover', (e) => {
     const t = (e.target as Element).closest<HTMLElement>('[data-cursor]');
-    cur.classList.toggle('is-hover', !!t);
+    tag.classList.toggle('is-on', !!t);
     if (t) label.textContent = t.dataset.cursor ?? '';
   });
-  document.addEventListener('pointerleave', () => gsap.to(cur, { autoAlpha: 0 }));
-  document.addEventListener('pointerenter', () => gsap.to(cur, { autoAlpha: 1 }));
+  document.documentElement.addEventListener('pointerleave', () => tag.classList.remove('is-on'));
 }
 
 /* ── oven eyes follow the pointer ──────────────── */
@@ -440,8 +437,8 @@ function initMenu() {
       const ry = gsap.quickTo(c, 'rotationY', { duration: 0.6, ease: 'power3' });
       c.addEventListener('pointermove', (e) => {
         const r = c.getBoundingClientRect();
-        ry(((e.clientX - r.left) / r.width - 0.5) * 12);
-        rx(((e.clientY - r.top) / r.height - 0.5) * -12);
+        ry(((e.clientX - r.left) / r.width - 0.5) * 6);
+        rx(((e.clientY - r.top) / r.height - 0.5) * -6);
       });
       c.addEventListener('pointerleave', () => { rx(0); ry(0); });
     });
@@ -458,7 +455,9 @@ function initMenu() {
       const a = Math.atan2(py || -1, px || 0.001);
       const R = r.width / 2;
       const br = R * 0.3;
-      const cx = R + Math.cos(a) * R * 0.98, cy = R + Math.sin(a) * R * 0.98;
+      // round treats get bitten on the rim; square ones (brownies) on their straight edge
+      const reach = btn.dataset.bite === 'square' ? Math.min(1.12, 0.84 / Math.max(Math.abs(Math.cos(a)), Math.abs(Math.sin(a)))) : 0.98;
+      const cx = R + Math.cos(a) * R * reach, cy = R + Math.sin(a) * R * reach;
       // three overlapping circles = toothy bite shape
       for (const off of [-0.55, 0, 0.55]) {
         const bx = cx + Math.cos(a + Math.PI / 2) * br * off;
@@ -526,6 +525,106 @@ function initMenu() {
   });
 }
 
+/* ── countdown to opening day ─────────────────── */
+function initCountdown() {
+  const box = $('[data-countdown]');
+  if (!box) return;
+  const target = new Date(box.dataset.countdown!).getTime();
+  if (Number.isNaN(target)) return;
+  const nums = Object.fromEntries($$('[data-unit]', box).map((el) => [el.dataset.unit!, el]));
+  const tiles = $('.cd__tiles', box)!;
+  const label = $('.cd__label', box)!;
+  const openMsg = $('.cd__open', box)!;
+  const dateEl = $<HTMLTimeElement>('[data-cd-date]', box)!;
+
+  // show the opening time in the visitor's own timezone
+  dateEl.textContent = new Date(target)
+    .toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+    .toLowerCase();
+
+  const shown: Record<string, string> = {};
+  const roll = (k: string, v: string) => {
+    if (shown[k] === v) return;
+    const el = nums[k];
+    const first = shown[k] === undefined;
+    shown[k] = v;
+    const old = el.querySelector('b');
+    if (first || reduced || !old) {
+      el.innerHTML = `<b>${v}</b>`;
+      return;
+    }
+    const nb = document.createElement('b');
+    nb.textContent = v;
+    el.appendChild(nb);
+    gsap.to(old, { yPercent: -110, opacity: 0, duration: 0.45, ease: 'back.in(1.6)', onComplete: () => old.remove() });
+    gsap.fromTo(nb, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.55, ease: 'back.out(2)' });
+  };
+
+  let done = false;
+  const tick = () => {
+    const left = Math.max(0, target - Date.now());
+    const sec = Math.floor(left / 1000);
+    roll('d', String(Math.floor(sec / 86400)).padStart(2, '0'));
+    roll('h', String(Math.floor((sec % 86400) / 3600)).padStart(2, '0'));
+    roll('m', String(Math.floor((sec % 3600) / 60)).padStart(2, '0'));
+    roll('s', String(sec % 60).padStart(2, '0'));
+    if (left === 0 && !done) {
+      done = true;
+      clearInterval(timer);
+      tiles.hidden = true;
+      label.hidden = true;
+      openMsg.hidden = false;
+      if (!reduced) {
+        gsap.from(openMsg, { scale: 0.4, rotation: -8, opacity: 0, duration: 0.9, ease: 'elastic.out(1, 0.5)' });
+        const r = openMsg.getBoundingClientRect();
+        if (r.top < innerHeight && r.bottom > 0) sprinkle(r.left + r.width / 2, r.top + r.height / 2, 24, 140);
+      }
+    }
+  };
+  const timer = setInterval(tick, 1000);
+  tick();
+
+  // "add to my calendar" → a tiny .ics file with a reminder 30 minutes before
+  $('[data-ics]', box)?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const stamp = (t: number) => new Date(t).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//aradhanas oven//orders//EN',
+      'BEGIN:VEVENT',
+      `UID:orders-open-${target}@aradhanas-oven`,
+      `DTSTAMP:${stamp(Date.now())}`,
+      `DTSTART:${stamp(target)}`,
+      `DTEND:${stamp(target + 60 * 60 * 1000)}`,
+      "SUMMARY:aradhana's oven — orders open! 🍪",
+      `DESCRIPTION:grab a warm batch before they're gone: ${location.href.split('#')[0]}`,
+      `URL:${location.href.split('#')[0]}`,
+      'BEGIN:VALARM',
+      'TRIGGER:-PT30M',
+      'ACTION:DISPLAY',
+      "DESCRIPTION:aradhana's oven opens in 30 minutes!",
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ].join('\r\n');
+    const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+    const a = Object.assign(document.createElement('a'), { href: url, download: 'aradhanas-oven-orders-open.ics' });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    sound.ding();
+  });
+
+  if (!reduced) {
+    gsap.from($$('.cd__tile', box), {
+      y: 40, opacity: 0, rotation: () => rand(-14, 14), duration: 0.8, ease: 'back.out(2.2)', stagger: 0.08,
+      scrollTrigger: { trigger: box, start: 'top 90%' },
+    });
+  }
+}
+
 /* ── jar (loaded only when you get close) ──────── */
 function initJarLazy() {
   const stage = $('#jar-stage');
@@ -534,7 +633,7 @@ function initJarLazy() {
     (ents) => {
       if (ents.some((e) => e.isIntersecting)) {
         io.disconnect();
-        import('./jar').then((m) => m.initJar({ reduced, fine, sound, gsap }));
+        import('./jar').then((m) => m.initJar({ reduced, fine, sound, gsap, looks: JSON.parse(stage.dataset.looks || '[]') }));
       }
     },
     { rootMargin: '400px 0px' },
@@ -553,6 +652,7 @@ function initJarLazy() {
   initAbout();
   initBake();
   initMenu();
+  initCountdown();
   initNav();
   initJarLazy();
   heroMotion();

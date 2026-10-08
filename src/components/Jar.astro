@@ -18,7 +18,7 @@ const j = site.jar;
       <p class="jar__count hand"><b id="jar-count">0</b> cookies in the jar</p>
     </div>
 
-    <div class="jar__glass" id="jar-stage">
+    <div class="jar__glass" id="jar-stage" data-looks={JSON.stringify([...new Set(site.cookies.map((c) => c.look))])}>
       <svg class="jar__back" viewBox="0 0 400 480" preserveAspectRatio="none" aria-hidden="true">
         <path d="M70 70h260v26c40 18 54 50 54 96v220c0 34-26 60-60 60H76c-34 0-60-26-60-60V192c0-46 14-78 54-96Z" fill="rgb(255 255 255 / .35)" />
       </svg>

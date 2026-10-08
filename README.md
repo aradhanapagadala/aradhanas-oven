@@ -21,11 +21,12 @@ npm run build      # static site in dist/ — upload anywhere (Netlify, Vercel, 
 | marquee | two crossed ribbons that speed up and flip direction with your scroll |
 | about | scalloped cookie-cutter photo frame, washi tape, chocolate chat bubbles you can drag and fling (they spring home) |
 | bake | pinned scroll story: mix → scoop → bake (oven glows, thermometer climbs to 350°) → *ding!* the door swings open and a cookie flies out in a burst of hearts |
-| menu | six procedurally illustrated cookies on gingham plates; 3D tilt; tap a cookie to take bites (with crumbs) until it's gone and a fresh one pops back; heart your faves |
+| menu | choc chip, brownies, reese’s pb, toffee crunch, chocolate pumpkin swirl — illustrated on gingham plates; tap to take bites (with crumbs) until it's gone and a fresh one pops back; heart your faves |
+| be the first to know | live countdown to opening day on little brownie tiles, local-timezone date, “add to my calendar” (.ics with reminder) |
 | jar | a real-physics cookie jar — grab & toss on desktop, flick on phones, shake it |
 | footer | dripping chocolate edge, night sky, a patch of smiling pumpkins |
 
-Extras: custom heart cursor with labels, sprinkle bursts on every click, optional synthesized sounds (bell button — "ding", "pop", "crunch"), bottom dock nav on phones, full `prefers-reduced-motion` support.
+Extras: pink native cursor with little labels, sprinkle bursts on every click, optional synthesized sounds (bell button — "ding", "pop", "crunch"), bottom dock nav on phones, full `prefers-reduced-motion` support.
 
 ## customize
 

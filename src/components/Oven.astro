@@ -1,17 +1,17 @@
 ---
 /* The oven mascot. Eyes follow the cursor, door can open (see bake section).
    The cavity shows a dough ball that "bakes" into a cookie. */
-import { cookieSVG } from '../lib/cookie';
+import { cookieSVG, type CookieLook } from '../lib/cookie';
 interface Props {
   class?: string;
   id?: string;
-  cookie?: 'classic' | 'peanut' | 'strawberry' | 'ube' | 'toffee' | 'pumpkin';
+  cookie?: CookieLook;
   label?: string;
 }
-const { class: cls = '', id, cookie = 'classic', label = 'a cute little pink oven with a happy face' } = Astro.props;
+const { class: cls = '', id, cookie = 'chocchip', label = 'a cute little pink oven with a happy face' } = Astro.props;
 const uid = id ?? 'oven';
 const baked = cookieSVG(cookie, 4, { id: `${uid}-ck`, shadow: false });
-const dough = cookieSVG('classic', 9, { id: `${uid}-dough`, shadow: false });
+const dough = cookieSVG('chocchip', 9, { id: `${uid}-dough`, shadow: false });
 ---
 
 <div class:list={['oven', cls]} id={id} role="img" aria-label={label}>

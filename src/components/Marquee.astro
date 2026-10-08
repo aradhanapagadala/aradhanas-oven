@@ -1,7 +1,7 @@
 ---
 import { site } from '../config/site';
 import { cookieSVG } from '../lib/cookie';
-const looks = ['classic', 'strawberry', 'ube', 'peanut', 'toffee', 'pumpkin'] as const;
+const looks = site.cookies.map((c) => c.look);
 const items = site.marquee;
 ---
 
