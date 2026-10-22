@@ -7,9 +7,17 @@
    pick a look by name, or add a `photo` to use a real picture).
    ────────────────────────────────────────────────────────────── */
 
+
+
 import type { ImageMetadata } from 'astro';
 import aradhanaPhoto from '../assets/photos/aradhana.jpg';
+import browniePhoto from '../assets/photos/brownies.jpg';
+import chocChipPhoto from '../assets/photos/chocolate-chip.jpg';
+import pumpkinPhoto from '../assets/photos/pumpkin-cookies.jpg';
+import reesesPhoto from '../assets/photos/reeses-cookies.jpg';
+import toffeePhoto from '../assets/photos/toffee-cookies.jpg';
 import type { CookieLook } from '../lib/cookie';
+
 
 export type Cookie = {
   id: string;
@@ -88,40 +96,50 @@ export const site = {
       name: 'chocolate chip cookies',
       blurb: 'the classic — golden, buttery edges, a soft gooey middle and lots of chocolate chips.',
       look: 'chocchip',
-      tags: ['the classic', 'bestseller'],
+      photo: chocChipPhoto,
+      tags: ['all-year-round!', 'bestseller'],
       tint: '#FFE9C7',
+      price: '$2.40 per cookie, $14.50 for a dozen!'
     },
     {
       id: 'brownies',
       name: 'brownies',
       blurb: 'rich, dense and fudgy with that crackly, shiny top. corner piece or middle? you choose.',
       look: 'brownie',
-      tags: ['fudgy', 'chocolate lover'],
+      photo: browniePhoto,
+      tags: ['all-year-round!', 'chocolate lover'],
       tint: '#F1DCD0',
+      price: '$3.15 per cookie, $19.00 for a dozen!'
     },
     {
       id: 'reeses-pb',
       name: 'reese’s peanut butter cookies',
       blurb: 'soft peanut butter cookies packed with chopped reese’s cups and pieces.',
       look: 'reeses',
-      tags: ['crowd fave'],
+      photo: reesesPhoto,
+      tags: ['crowd fave', 'seasonal 🎃', 'limited'],
       tint: '#FFE0CC',
+      price: '$2.50 per cookie, $15.00 for a dozen!'
     },
     {
       id: 'toffee-crunch',
       name: 'toffee crunch cookies',
       blurb: 'brown sugar dough loaded with buttery toffee bits and chocolate, finished with flaky salt.',
       look: 'toffee',
-      tags: ['crunchy edges'],
+      photo: toffeePhoto,
+      tags: ['seasonal 🎃', 'limited'],
       tint: '#F7E2CF',
+      price: '$2.50 per cookie, $15.00 for a dozen!'
     },
     {
       id: 'choc-pumpkin-swirl',
       name: 'chocolate pumpkin swirl cookies',
       blurb: 'spiced pumpkin dough with a ribbon of chocolate swirled through — fall in a cookie.',
       look: 'pumpkinswirl',
+      photo: pumpkinPhoto,
       tags: ['seasonal 🎃', 'limited'],
       tint: '#FFDCC4',
+      price: '$2.70 per cookie, $16.50 for a dozen!'
     },
   ] satisfies Cookie[],
 
