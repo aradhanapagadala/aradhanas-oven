@@ -1,10 +1,9 @@
-// @ts-check
+
 import { defineConfig } from 'astro/config';
 
-// GitHub Pages: https://sathwiksang.github.io/aradhanas-oven/
-// (if you move to a custom domain, set `site` to it and remove `base`)
+// GitHub Pages configuration
 export default defineConfig({
-  site: 'https://sathwiksang.github.io',
+  site: 'https://aradhanapagadala.github.io',
   base: '/aradhanas-oven',
   devToolbar: { enabled: false },
 });
