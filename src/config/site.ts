@@ -99,7 +99,6 @@ export const site = {
       photo: chocChipPhoto,
       tags: ['all-year-round!', 'bestseller'],
       tint: '#FFE9C7',
-      price: '$2.40 per cookie, $14.50 for a dozen!'
     },
     {
       id: 'brownies',
@@ -109,7 +108,6 @@ export const site = {
       photo: browniePhoto,
       tags: ['all-year-round!', 'chocolate lover'],
       tint: '#F1DCD0',
-      price: '$3.15 per cookie, $19.00 for a dozen!'
     },
     {
       id: 'reeses-pb',
@@ -119,7 +117,6 @@ export const site = {
       photo: reesesPhoto,
       tags: ['crowd fave', 'seasonal 🎃', 'limited'],
       tint: '#FFE0CC',
-      price: '$2.50 per cookie, $15.00 for a dozen!'
     },
     {
       id: 'toffee-crunch',
@@ -129,7 +126,6 @@ export const site = {
       photo: toffeePhoto,
       tags: ['seasonal 🎃', 'limited'],
       tint: '#F7E2CF',
-      price: '$2.50 per cookie, $15.00 for a dozen!'
     },
     {
       id: 'choc-pumpkin-swirl',
@@ -139,7 +135,6 @@ export const site = {
       photo: pumpkinPhoto,
       tags: ['seasonal 🎃', 'limited'],
       tint: '#FFDCC4',
-      price: '$2.70 per cookie, $16.50 for a dozen!'
     },
   ] satisfies Cookie[],
 
